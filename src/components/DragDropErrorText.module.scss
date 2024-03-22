@@ -1,0 +1,15 @@
+@use "breakpoints";
+
+.drag-drop__stop-icon {
+  color: #ba1414;
+}
+
+.drag-drop__error_text {
+  font-size: 1rem;
+  color: #9e3838ab;
+  margin: 0.95rem 1.2rem;
+
+  @media (min-width: breakpoints.$lg) {
+    font-size: 1.3rem;
+  }
+}

@@ -1,0 +1,28 @@
+.video-player-container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background-color: black;
+  height: 100%;
+
+  &:hover .video-controls-container,
+  &.paused .video-controls-container,
+  &:focus-within .video-controls-container {
+    opacity: 100;
+  }
+
+  &.hidden {
+    cursor: none;
+  }
+
+  & .video-controls-container {
+    opacity: 0;
+    z-index: 99;
+    transition: opacity 200ms ease-in-out;
+
+    &.hidden {
+      opacity: 0;
+    }
+  }
+}

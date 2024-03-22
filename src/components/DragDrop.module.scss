@@ -1,0 +1,70 @@
+@use "colors";
+@use "breakpoints";
+@use "sass:color";
+
+$margin: 0.15rem;
+
+.drag-drop-container {
+  padding: 0.75rem;
+  height: 100%;
+}
+
+.drag-drop {
+  background-color: lighten(colors.$light-gray, 18%);
+  margin: $margin;
+  border: 2px dashed colors.$main-gray;
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  place-items: center center;
+  transition: all 125ms ease-in-out;
+  height: calc(100% - 2 * $margin);
+  text-align: center;
+  cursor: pointer;
+
+  @media (min-width: breakpoints.$lg) {
+    margin: 5 * $margin;
+    height: calc(100% - 2 * 5 * $margin);
+  }
+}
+
+.drag-drop--focused,
+.drag-drop:active {
+  border-width: 3px;
+  border-color: colors.$light-blue;
+  transform: scale(1.015);
+}
+
+.drag-drop__text {
+  font-size: 1.35em;
+  color: #514a4aab;
+  margin: 0 1.2rem;
+
+  @media (min-width: breakpoints.$lg) {
+    font-size: 1.75rem;
+  }
+}
+
+.drag-drop__subtext {
+  font-size: 0.95rem;
+  color: #4e4848ab;
+  margin: 0.95rem 1.2rem;
+
+  @media (min-width: breakpoints.$lg) {
+    font-size: 1.25rem;
+  }
+}
+
+.drag-drop__upload-icon {
+  color: colors.$deep-purple;
+  font-size: 7.25rem;
+
+  @media (min-width: breakpoints.$lg) {
+    font-size: 8.75rem;
+  }
+
+  @media (min-wdith: breakpoints.$xxl) {
+    font-size: 10rem;
+  }
+}
