@@ -17,6 +17,9 @@ export const formatTimestamp = (time: number) => {
   }
 };
 
+/**
+ * A number formatter that ensures the digit is formatted with 2 digits.
+ */
 const leadingZeroFormatter = new Intl.NumberFormat("en-US", {
   minimumIntegerDigits: 2,
 });

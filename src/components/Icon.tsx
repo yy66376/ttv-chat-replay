@@ -1,5 +1,5 @@
-import { IconContext } from "react-icons";
-import { PropsWithChildren } from "react";
+import {IconContext} from "react-icons";
+import {PropsWithChildren} from "react";
 import classes from "./Icon.module.scss";
 
 export type IconProps = {
@@ -7,7 +7,7 @@ export type IconProps = {
 } & IconContext &
   PropsWithChildren;
 
-const Icon = ({ children, verticalAlign, ...restProps }: IconProps) => {
+const Icon = ({children, verticalAlign, ...restProps}: IconProps) => {
   let iconClass = "";
   switch (verticalAlign) {
     case "top":
@@ -24,7 +24,7 @@ const Icon = ({ children, verticalAlign, ...restProps }: IconProps) => {
   }
   return (
     <IconContext.Provider
-      value={{ ...restProps, className: `${iconClass} ${restProps.className}` }}
+      value={{...restProps, className: `${iconClass} ${restProps.className}`}}
     >
       {children}
     </IconContext.Provider>

@@ -1,5 +1,5 @@
-import { createContext, PropsWithChildren, useState } from "react";
-import { VideoSourceProps } from "../components/video/VideoSource";
+import {createContext, PropsWithChildren, useState} from "react";
+import {VideoSourceProps} from "../components/video/VideoSource";
 
 interface VideoPlayerContextState {
   duration: number;
@@ -38,26 +38,43 @@ export const VideoPlayerContext = createContext<VideoPlayerContextState>({
   isMuted: false,
   sources: [],
   volume: 1,
-  onSetSources: (sources) => {},
-  onToggleFullscreen: () => {},
-  onEnterFullscreen: () => {},
-  onExitFullscreen: () => {},
-  onTogglePlayPause: () => {},
-  onPause: () => {},
-  onPlay: () => {},
-  onTogglePip: () => {},
-  onEnterPip: () => {},
-  onExitPip: () => {},
-  onChangeVolume: () => {},
-  onToggleMute: () => {},
-  onIncreaseVolume: () => {},
-  onDecreaseVolume: () => {},
-  onChangeDuration: (duration: number) => {},
-  onChangeTime: (time: number) => {},
-  onSkip: (seconds: number) => {},
+  onSetSources: (sources) => {
+  },
+  onToggleFullscreen: () => {
+  },
+  onEnterFullscreen: () => {
+  },
+  onExitFullscreen: () => {
+  },
+  onTogglePlayPause: () => {
+  },
+  onPause: () => {
+  },
+  onPlay: () => {
+  },
+  onTogglePip: () => {
+  },
+  onEnterPip: () => {
+  },
+  onExitPip: () => {
+  },
+  onChangeVolume: () => {
+  },
+  onToggleMute: () => {
+  },
+  onIncreaseVolume: () => {
+  },
+  onDecreaseVolume: () => {
+  },
+  onChangeDuration: (duration: number) => {
+  },
+  onChangeTime: (time: number) => {
+  },
+  onSkip: (seconds: number) => {
+  },
 });
 
-const VideoPlayerContextProvider = ({ children }: PropsWithChildren) => {
+const VideoPlayerContextProvider = ({children}: PropsWithChildren) => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isPip, setIsPip] = useState(false);

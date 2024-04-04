@@ -1,0 +1,13 @@
+.time-duration-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  column-gap: 0.25rem;
+  flex-grow: 1;
+  font-size: 1.25rem;
+
+  &:hover {
+    transform: none;
+    cursor: text;
+  }
+}

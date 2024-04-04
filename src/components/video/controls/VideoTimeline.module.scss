@@ -1,0 +1,62 @@
+@use "../../colors";
+
+$timeline-color: lighten(colors.$light-purple, 25%);
+$timeline-br: 8px;
+$timeline-transition-time: 175ms;
+
+.video-timeline-container {
+  height: 0.8rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  & .video-timeline {
+    position: relative;
+    background-color: rgba(175, 175, 175, 0.7);
+    margin: 0 1rem;
+    border-radius: $timeline-br;
+    height: 0.4rem;
+    transition: height 150ms ease-in-out;
+
+    & .video-timeline__elapsed {
+      height: 100%;
+      width: var(--timeline-left);
+      border-radius: $timeline-br;
+      background-color: $timeline-color;
+
+      &::after {
+        content: "";
+        display: block;
+        position: absolute;
+        top: -50%;
+        left: var(--timeline-left);
+        scale: 0;
+        border-radius: 50%;
+        height: 200%;
+        aspect-ratio: 1/1;
+        transform: translateX(-50%);
+        background-color: $timeline-color;
+        transition: scale 150ms ease-in-out;
+      }
+    }
+  }
+
+  &:hover .video-timeline {
+    height: 100%;
+
+    .video-timeline__elapsed::after {
+      scale: 1;
+    }
+  }
+}
+
+.tooltip {
+  background-color: white;
+  color: black;
+  font-size: 1.25rem;
+  border-radius: 5px;
+  padding: 4px 8px;
+  width: max-content;
+  max-width: calc(100vw - 10px);
+}

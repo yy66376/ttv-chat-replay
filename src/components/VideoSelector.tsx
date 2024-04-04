@@ -1,11 +1,11 @@
-import { useContext } from "react";
-import { VideoPlayerContext } from "../store/video-player-context";
-import DragDrop from "./DragDrop";
-import VideoPlayerContainer from "./video/VideoPlayerContainer";
+import {useContext} from "react";
+import {VideoPlayerContext} from "../store/video-player-context";
+import VideoPlayerContainer from "./video/player/VideoPlayerContainer";
+import VideoDragDrop from "./video/VideoDragDrop";
 
 const VideoSelector = () => {
-  const { sources } = useContext(VideoPlayerContext);
-  return sources.length ? <VideoPlayerContainer /> : <DragDrop />;
+  const {sources} = useContext(VideoPlayerContext);
+  return sources.length ? <VideoPlayerContainer/> : <VideoDragDrop/>;
 };
 
 export default VideoSelector;

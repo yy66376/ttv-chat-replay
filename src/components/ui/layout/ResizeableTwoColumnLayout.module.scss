@@ -1,0 +1,27 @@
+.wrapper {
+  display: flex;
+  height: 100%;
+}
+
+.resizeable-col {
+  flex: 1 1 auto;
+}
+
+.resize-handler-container {
+  cursor: ew-resize;
+  height: 100%;
+  width: 10px;
+
+  & .resize-handler {
+    margin: auto;
+    background-color: #aaa;
+    height: 100%;
+    width: 4px;
+    cursor: ew-resize;
+    transition: width 150ms ease-in-out;
+  }
+
+  &:active .resize-handler {
+    width: 8px;
+  }
+}

@@ -1,0 +1,78 @@
+$track-height: 0.25rem;
+$thumb-size: 1rem;
+
+@mixin track {
+  background-color: white;
+  height: $track-height;
+  border-radius: 3px;
+}
+
+@mixin thumb {
+  appearance: none;
+  background-color: white;
+  height: $thumb-size;
+  width: $thumb-size;
+  margin-top: calc($track-height / 2) - calc($thumb-size / 2);
+  border-radius: 50%;
+}
+
+@mixin thumb-focus {
+  border: 1px solid #053a5f;
+  outline: 3px solid white;
+  outline-offset: 0.085rem;
+}
+
+.volume-container {
+  display: flex;
+  align-items: center;
+
+  & .volume-slider {
+    opacity: 0.75;
+    transition: all 150ms ease-in-out;
+    transform-origin: left;
+    transform: scaleX(0);
+    width: 0;
+
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+
+    &::-webkit-slider-runnable-track {
+      @include track;
+    }
+
+    &::-moz-range-track {
+      @include track;
+    }
+
+    &::-webkit-slider-thumb {
+      @include thumb;
+    }
+
+    &::-moz-range-thumb {
+      @include thumb;
+    }
+
+    &:focus {
+      outline: none;
+
+      &::-webkit-slider-thumb {
+        @include thumb-focus;
+      }
+
+      &::-moz-range-thumb {
+        @include thumb-focus;
+      }
+    }
+  }
+
+  &:hover .volume-slider,
+  &:focus-within .volume-slider {
+    width: 100%;
+    transform: scaleX(1);
+  }
+
+  &:hover * {
+    opacity: 1;
+  }
+}

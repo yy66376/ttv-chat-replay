@@ -1,0 +1,33 @@
+$button-size: 2rem;
+
+.video-controls {
+  display: flex;
+  column-gap: 1.05rem;
+  padding: 0.75rem;
+  align-items: center;
+}
+
+.video-controls__btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: none;
+  border: none;
+  color: inherit;
+  height: $button-size;
+  width: $button-size;
+  font-size: 1.55rem;
+  cursor: pointer;
+  opacity: 0.75;
+  transition: opacity 250ms ease-in-out, scale 150ms ease-in-out;
+
+  &:hover,
+  &:focus {
+    opacity: 1;
+    transform: scale(1.038);
+  }
+
+  & svg {
+    vertical-align: middle;
+  }
+}

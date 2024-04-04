@@ -1,0 +1,32 @@
+@use "../../colors";
+
+div.speed-btn {
+  height: fit-content;
+  width: 4.5rem;
+  background-color: white;
+  color: black;
+  border-radius: 8px;
+  padding: 0.2rem 0;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.speed-option {
+  font-size: 1.15rem;
+  padding-top: 0.45rem;
+  padding-bottom: 0.45rem;
+  position: relative;
+
+  &--selected::after {
+    content: "";
+    display: inline-block;
+    background-color: colors.$light-blue;
+    border-radius: 50%;
+    width: 0.65rem;
+    aspect-ratio: 1/1;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 1.25rem;
+  }
+}
