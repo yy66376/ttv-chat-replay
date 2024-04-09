@@ -1,4 +1,4 @@
-import {MouseEvent, ReactNode, useCallback, useEffect, useState} from "react";
+import { MouseEvent, ReactNode, useEffect, useState } from "react";
 import classes from "./ResizeableTwoColumnLayout.module.scss";
 
 interface ResizeableTwoColumnLayoutProps {
@@ -8,35 +8,35 @@ interface ResizeableTwoColumnLayoutProps {
   resizeHandlerClassName?: string;
 }
 
+let isDragging = false;
+
 const ResizeableTwoColumnLayout = ({
-                                     children,
-                                     col1ClassName,
-                                     col2ClassName,
-                                     resizeHandlerClassName,
-                                   }: ResizeableTwoColumnLayoutProps) => {
-  const [isDragging, setIsDragging] = useState(false);
+  children,
+  col1ClassName,
+  col2ClassName,
+  resizeHandlerClassName,
+}: ResizeableTwoColumnLayoutProps) => {
   const [col1Width, setCol1Width] = useState<number | null>(null);
 
   const handleResizeHandlerMouseDown = (e: MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
-    setIsDragging(true);
+    isDragging = true;
   };
 
   const handleMouseUp = (
     e: MouseEvent<HTMLDivElement> | globalThis.MouseEvent
   ) => {
-    setIsDragging(false);
+    if (!isDragging) return;
+    isDragging = false;
   };
 
-  const handleMouseMove = useCallback(
-    (e: MouseEvent<HTMLDivElement> | globalThis.MouseEvent) => {
-      e.preventDefault();
-      if (!isDragging) return;
-
-      setCol1Width(e.clientX - 2);
-    },
-    [isDragging]
-  );
+  const handleMouseMove = (
+    e: MouseEvent<HTMLDivElement> | globalThis.MouseEvent
+  ) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    setCol1Width(e.clientX - 2);
+  };
 
   useEffect(() => {
     document.addEventListener("mouseup", handleMouseUp);
@@ -46,14 +46,16 @@ const ResizeableTwoColumnLayout = ({
       document.removeEventListener("mouseup", handleMouseUp);
       document.removeEventListener("mousemove", handleMouseMove);
     };
-  }, [handleMouseMove]);
+  }, []);
 
   return (
     <div className={classes["wrapper"]}>
       <div
         className={`${col1ClassName ?? ""} ${classes["resizeable-col"]}`}
         style={
-          col1Width !== null ? {width: `${col1Width}px`, flexGrow: 0} : {}
+          col1Width !== null
+            ? { width: `${col1Width}px`, flexGrow: 0, flexShrink: 0 }
+            : {}
         }
       >
         {children[0]}

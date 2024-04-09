@@ -1,4 +1,4 @@
-import {RiForward5Line, RiReplay5Line} from "react-icons/ri";
+import { RiForward5Line, RiReplay5Line } from "react-icons/ri";
 import classes from "./VideoControls.module.scss";
 import SpeedControl from "./SpeedControl";
 import TimeDurationControl from "./TimeDurationControl";
@@ -9,6 +9,7 @@ import ReplayControl from "./ReplayControl";
 import PlayControl from "./PlayControl";
 
 interface VideoControlsProps {
+  className?: string;
   duration: number;
   isEnded: boolean;
   isPlaying: boolean;
@@ -28,25 +29,26 @@ interface VideoControlsProps {
 }
 
 const VideoControls = ({
-                         duration,
-                         isEnded,
-                         isPlaying,
-                         isFullscreen,
-                         isMuted,
-                         isPip,
-                         time,
-                         volume,
-                         onTogglePlayPause,
-                         onToggleFullscreen,
-                         onToggleMuted,
-                         onTogglePip,
-                         onChangeVolume,
-                         onReplay,
-                         onSkip,
-                         onChangeSpeed,
-                       }: VideoControlsProps) => {
+  className,
+  duration,
+  isEnded,
+  isPlaying,
+  isFullscreen,
+  isMuted,
+  isPip,
+  time,
+  volume,
+  onTogglePlayPause,
+  onToggleFullscreen,
+  onToggleMuted,
+  onTogglePip,
+  onChangeVolume,
+  onReplay,
+  onSkip,
+  onChangeSpeed,
+}: VideoControlsProps) => {
   return (
-    <div className={classes["video-controls"]}>
+    <div className={`${className ?? ""} ${classes["video-controls"]}`}>
       {isEnded && (
         <ReplayControl
           className={classes["video-controls__btn"]}
@@ -64,13 +66,13 @@ const VideoControls = ({
         className={classes["video-controls__btn"]}
         onClick={() => onSkip(-5)}
       >
-        <RiReplay5Line/>
+        <RiReplay5Line />
       </button>
       <button
         className={classes["video-controls__btn"]}
         onClick={() => onSkip(5)}
       >
-        <RiForward5Line/>
+        <RiForward5Line />
       </button>
       <VolumeControl
         isMuted={isMuted}

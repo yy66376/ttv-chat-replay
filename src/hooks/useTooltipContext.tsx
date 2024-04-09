@@ -1,5 +1,5 @@
-import {useContext} from "react";
-import {TooltipContext} from "../store/tooltip-context";
+import { useContext } from "react";
+import { TooltipContext } from "../store/tooltip-context";
 
 const useTooltipContext = () => {
   const context = useContext(TooltipContext);

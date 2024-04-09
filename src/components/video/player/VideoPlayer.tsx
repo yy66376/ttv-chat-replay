@@ -1,7 +1,12 @@
-import {DetailedHTMLProps, forwardRef, useContext, VideoHTMLAttributes,} from "react";
+import {
+  DetailedHTMLProps,
+  forwardRef,
+  useContext,
+  VideoHTMLAttributes,
+} from "react";
 import VideoSource from "../VideoSource";
 import classes from "./VideoPlayer.module.scss";
-import {VideoPlayerContext} from "../../../store/video-player-context";
+import { VideoPlayerContext } from "../../../store/video-player-context";
 
 export type VideoPlayerProps = {} & DetailedHTMLProps<
   VideoHTMLAttributes<HTMLVideoElement>,
@@ -10,7 +15,7 @@ export type VideoPlayerProps = {} & DetailedHTMLProps<
 
 const VideoPlayer = forwardRef<HTMLVideoElement, VideoPlayerProps>(
   function VideoPlayer(props, ref) {
-    const {sources} = useContext(VideoPlayerContext);
+    const { sources } = useContext(VideoPlayerContext);
 
     return (
       <video className={classes["video-player"]} {...props} ref={ref}>
@@ -19,7 +24,7 @@ const VideoPlayer = forwardRef<HTMLVideoElement, VideoPlayerProps>(
         ))}
       </video>
     );
-  }
+  },
 );
 
 export default VideoPlayer;

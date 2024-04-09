@@ -1,9 +1,9 @@
-import {IconContext} from "react-icons";
-import {PropsWithChildren} from "react";
+import { IconContext } from "react-icons";
+import { PropsWithChildren } from "react";
 
 type BlockIconProps = IconContext & PropsWithChildren;
 
-const BlockIcon = ({children, ...restProps}: BlockIconProps) => {
+const BlockIcon = ({ children, ...restProps }: BlockIconProps) => {
   return (
     <IconContext.Provider value={restProps}>
       <div>{children}</div>

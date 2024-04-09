@@ -1,9 +1,13 @@
+@use "../../breakpoints";
+
 .video-controls-container {
   position: absolute;
   bottom: 0;
   left: 0;
   color: white;
   width: 100%;
+  container: video-controls-container / inline-size;
+  font-size: 1.25rem;
 }
 
 .video-controls-container__overlay {

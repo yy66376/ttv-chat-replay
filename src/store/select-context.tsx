@@ -1,5 +1,5 @@
-import {useInteractions} from "@floating-ui/react";
-import {createContext} from "react";
+import { useInteractions } from "@floating-ui/react";
+import { createContext } from "react";
 
 export interface SelectContextValue {
   activeIndex: number | null;
@@ -11,7 +11,6 @@ export interface SelectContextValue {
 export const SelectContext = createContext<SelectContextValue>({
   activeIndex: null,
   selectedIndex: null,
-  getItemProps: (userProps) => ({"": ""}),
-  handleSelect: (index) => {
-  },
+  getItemProps: (userProps) => ({ "": "" }),
+  handleSelect: (index) => {},
 });

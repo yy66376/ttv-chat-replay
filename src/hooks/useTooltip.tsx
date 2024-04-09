@@ -1,9 +1,9 @@
 import {
   arrow,
-  ArrowOptions,
   autoUpdate,
   flip,
   FlipOptions,
+  FloatingArrowProps,
   offset,
   OffsetOptions,
   Placement,
@@ -19,12 +19,19 @@ import {
   useInteractions,
   useRole,
 } from "@floating-ui/react";
-import {PropsWithChildren, useMemo, useState} from "react";
+import {
+  PropsWithChildren,
+  useMemo,
+  useState,
+  MutableRefObject,
+  useRef,
+} from "react";
 
 type RequiredUseTooltipProps = PropsWithChildren<{
+  arrow?: boolean;
+  arrowOptions?: Omit<FloatingArrowProps, "context" | "ref">;
   initialOpen?: boolean;
   placement?: Placement;
-  arrow?: ArrowOptions;
   offset?: OffsetOptions;
   flip?: FlipOptions;
   shift?: ShiftOptions;
@@ -33,6 +40,7 @@ type RequiredUseTooltipProps = PropsWithChildren<{
   focusProps?: UseFocusProps;
   referenceClassName?: string;
   floatingClassName?: string;
+  portalRoot?: HTMLElement | MutableRefObject<HTMLElement | null>;
 }>;
 
 interface ControlledUseTooltipProps extends RequiredUseTooltipProps {
@@ -50,19 +58,22 @@ export type UseTooltipProps =
   | UncontrolledUseTooltipProps;
 
 const useTooltip = ({
-                      initialOpen = false,
-                      placement = "top",
-                      open: controlledOpen,
-                      onOpenChange: setControlledOpen,
-                      offset: offSetOptions = 5,
-                      arrow: arrowOptions,
-                      flip: flipOptions,
-                      focusProps: focusOptions,
-                      shift: shiftOptions,
-                      dismissProps,
-                      hoverProps,
-                    }: UseTooltipProps) => {
+  initialOpen = false,
+  placement = "top",
+  open: controlledOpen,
+  onOpenChange: setControlledOpen,
+  offset: offSetOptions = 5,
+  arrow: arrowEnabled,
+  arrowOptions,
+  flip: flipOptions,
+  focusProps: focusOptions,
+  shift: shiftOptions,
+  dismissProps,
+  hoverProps,
+  portalRoot,
+}: UseTooltipProps) => {
   const [uncontrolledOpen, setUncontrolledOpen] = useState(initialOpen);
+  const arrowRef = useRef<SVGSVGElement | null>(null);
 
   const isOpen = controlledOpen ?? uncontrolledOpen;
   const setIsOpen = setControlledOpen ?? setUncontrolledOpen;
@@ -76,11 +87,11 @@ const useTooltip = ({
       offset(offSetOptions),
       flip(flipOptions),
       shift(shiftOptions),
-      arrowOptions ? arrow(arrowOptions) : undefined,
+      arrow({ element: arrowRef }),
     ],
   });
 
-  const role = useRole(data.context, {role: "tooltip"});
+  const role = useRole(data.context, { role: "tooltip" });
   const dismiss = useDismiss(data.context, dismissProps);
   const hover = useHover(data.context, hoverProps);
   const focus = useFocus(data.context, focusOptions);
@@ -89,12 +100,23 @@ const useTooltip = ({
 
   return useMemo(
     () => ({
+      arrowRef: arrowEnabled ? arrowRef : null,
+      arrowOptions,
+      portalRoot,
       isOpen,
       setIsOpen,
       ...interactions,
       ...data,
     }),
-    [isOpen, setIsOpen, interactions, data]
+    [
+      isOpen,
+      setIsOpen,
+      interactions,
+      data,
+      portalRoot,
+      arrowEnabled,
+      arrowOptions,
+    ]
   );
 };
 

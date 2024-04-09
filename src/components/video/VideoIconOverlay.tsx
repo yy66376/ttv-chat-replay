@@ -1,11 +1,11 @@
-import {ReactNode, useEffect, useState} from "react";
+import { ReactNode, useEffect, useState } from "react";
 import classes from "./VideoIconOverlay.module.scss";
 
 interface VideoIconOverlayProps {
   icon: ReactNode | null;
 }
 
-const VideoIconOverlay = ({icon}: VideoIconOverlayProps) => {
+const VideoIconOverlay = ({ icon }: VideoIconOverlayProps) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {

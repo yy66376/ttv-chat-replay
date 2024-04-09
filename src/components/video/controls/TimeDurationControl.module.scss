@@ -1,13 +1,39 @@
+@use "../../breakpoints";
+
 .time-duration-container {
   display: flex;
   align-items: center;
   justify-content: flex-start;
   column-gap: 0.25rem;
   flex-grow: 1;
-  font-size: 1.25rem;
+  font-size: 0.85rem;
 
   &:hover {
     transform: none;
     cursor: text;
+  }
+}
+
+@container (min-width: #{breakpoints.$sm}) {
+  .time-duration-container {
+    font-size: 0.95rem;
+  }
+}
+
+@container (min-width: #{breakpoints.$md}) {
+  .time-duration-container {
+    font-size: 1.1rem;
+  }
+}
+
+@container (min-width: #{breakpoints.$lg}) {
+  .time-duration-container {
+    font-size: 1.25rem;
+  }
+}
+
+@container (min-width: #{breakpoints.$xl}) {
+  .time-duration-container {
+    font-size: 1.4rem;
   }
 }

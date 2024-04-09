@@ -1,10 +1,19 @@
-import {CSSProperties, MouseEvent, useCallback, useEffect, useRef, useState,} from "react";
+import {
+  CSSProperties,
+  MouseEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import clamp from "../../../utility/clamp";
-import {formatTimestamp} from "../../../utility/time";
+import { formatTimestamp } from "../../../utility/time";
 import Tooltip from "../../ui/tooltip/Tooltip";
 import TooltipContent from "../../ui/tooltip/TooltipContent";
 import TooltipMouseMoveTrigger from "../../ui/tooltip/TooltipMouseMoveTrigger";
 import classes from "./VideoTimeline.module.scss";
+
+let isScrubbing = false;
 
 interface VideoTimelineProps {
   duration: number;
@@ -12,10 +21,10 @@ interface VideoTimelineProps {
   onSeek: (seconds: number) => void;
 }
 
-const VideoTimeline = ({duration, time, onSeek}: VideoTimelineProps) => {
-  const [isScrubbing, setIsScrubbing] = useState(false);
+const VideoTimeline = ({ duration, time, onSeek }: VideoTimelineProps) => {
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const [seekTime, setSeekTime] = useState<number | null>(null);
+  const timelineContainerRef = useRef<HTMLDivElement | null>(null);
   const timelineRef = useRef<HTMLDivElement | null>(null);
   const leftProgress = `${
     ((isScrubbing && seekTime !== null ? seekTime : time) / duration) * 100
@@ -39,19 +48,20 @@ const VideoTimeline = ({duration, time, onSeek}: VideoTimelineProps) => {
 
   const handleTimelineMouseDown = (e: MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
-    setIsScrubbing(true);
+    isScrubbing = true;
   };
 
   useEffect(() => {
     const handleMouseUp = () => {
       if (!isScrubbing || seekTime === null) return;
-      setIsScrubbing(false);
+      isScrubbing = false;
       setIsTooltipOpen(false);
       onSeek(seekTime);
     };
 
     const handleMouseMove = (e: globalThis.MouseEvent) => {
       if (!isScrubbing) return;
+      e.preventDefault();
       setSeekTime(calculateTime(e));
       setIsTooltipOpen(true);
     };
@@ -62,26 +72,36 @@ const VideoTimeline = ({duration, time, onSeek}: VideoTimelineProps) => {
       document.removeEventListener("mouseup", handleMouseUp);
       document.removeEventListener("mousemove", handleMouseMove);
     };
-  }, [isScrubbing, seekTime, onSeek, calculateTime]);
+  }, [seekTime, onSeek, calculateTime]);
 
   return (
-    <div className={classes["video-timeline-container"]}>
-      <Tooltip offset={15} open={isTooltipOpen} onOpenChange={setIsTooltipOpen}>
-        <TooltipMouseMoveTrigger triggerRef={timelineRef}/>
-        <TooltipContent className={classes["tooltip"]}>
-          {seekTime !== null ? formatTimestamp(seekTime) : ""}
-        </TooltipContent>
-      </Tooltip>
+    <>
       <div
-        className={classes["video-timeline"]}
-        ref={timelineRef}
-        style={{"--timeline-left": leftProgress} as CSSProperties}
-        onMouseMove={handleTimelineMouseMove}
-        onMouseDown={handleTimelineMouseDown}
+        className={classes["video-timeline-container"]}
+        ref={timelineContainerRef}
+        style={{ "--timeline-left": leftProgress } as CSSProperties}
       >
-        <div className={classes["video-timeline__elapsed"]}></div>
+        <Tooltip
+          offset={15}
+          open={isTooltipOpen}
+          portalRoot={timelineContainerRef}
+          onOpenChange={setIsTooltipOpen}
+        >
+          <TooltipMouseMoveTrigger triggerRef={timelineRef} />
+          <TooltipContent className={classes["tooltip"]}>
+            {seekTime !== null ? formatTimestamp(seekTime) : ""}
+          </TooltipContent>
+        </Tooltip>
+        <div
+          className={classes["video-timeline"]}
+          ref={timelineRef}
+          onMouseMove={handleTimelineMouseMove}
+          onMouseDown={handleTimelineMouseDown}
+        >
+          <div className={classes["video-timeline__elapsed"]}></div>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

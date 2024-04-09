@@ -1,4 +1,4 @@
-import {FaPause, FaPlay} from "react-icons/fa6";
+import { FaPause, FaPlay } from "react-icons/fa6";
 
 interface PlayControlProps {
   className?: string;
@@ -7,14 +7,14 @@ interface PlayControlProps {
 }
 
 const PlayControl = ({
-                       className,
-                       isPlaying,
-                       onTogglePlayPause,
-                     }: PlayControlProps) => {
+  className,
+  isPlaying,
+  onTogglePlayPause,
+}: PlayControlProps) => {
   return (
     <button className={className ?? ""} onClick={onTogglePlayPause}>
-      {!isPlaying && <FaPlay/>}
-      {isPlaying && <FaPause/>}
+      {!isPlaying && <FaPlay />}
+      {isPlaying && <FaPause />}
     </button>
   );
 };

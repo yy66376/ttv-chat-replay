@@ -1,11 +1,15 @@
 import VideoPlayer from "./VideoPlayer";
 import classes from "./VideoPlayerContainer.module.scss";
 import VideoControlsContainer from "../controls/VideoControlsContainer";
-import {KeyboardEvent, ReactNode, useEffect, useRef, useState} from "react";
-import {FaPause, FaPlay} from "react-icons/fa6";
+import { KeyboardEvent, ReactNode, useEffect, useRef, useState } from "react";
+import { FaPause, FaPlay } from "react-icons/fa6";
 import VideoIconOverlay from "../VideoIconOverlay";
-import {RiForward5Line, RiReplay5Line} from "react-icons/ri";
-import {BiSolidVolumeFull, BiSolidVolumeLow, BiSolidVolumeMute,} from "react-icons/bi";
+import { RiForward5Line, RiReplay5Line } from "react-icons/ri";
+import {
+  BiSolidVolumeFull,
+  BiSolidVolumeLow,
+  BiSolidVolumeMute,
+} from "react-icons/bi";
 import clamp from "../../../utility/clamp";
 
 const MOUSE_TIMEOUT = 4220;
@@ -30,21 +34,21 @@ const VideoPlayerContainer = () => {
   const [isPip, setIsPip] = useState(!!document.pictureInPictureElement);
   const [volume, setVolume] = useState(videoRefCurrent?.volume ?? 1);
 
-  const handleToggleFullscreen = () => {
+  const handleToggleFullscreen = async () => {
     if (isFullscreen) {
-      document.exitFullscreen();
+      await document.exitFullscreen();
     } else {
-      videoContainerRefCurrent?.requestFullscreen();
+      await videoContainerRefCurrent?.requestFullscreen();
     }
     setIsFullscreen((prevIsFullScreen) => !prevIsFullScreen);
   };
 
   const handleTogglePlayPause = () => {
     if (isPlaying) {
-      setOverlayIcon(<FaPause/>);
+      setOverlayIcon(<FaPause />);
       handlePause();
     } else {
-      setOverlayIcon(<FaPlay/>);
+      setOverlayIcon(<FaPlay />);
       handlePlay();
     }
   };
@@ -68,14 +72,14 @@ const VideoPlayerContainer = () => {
   const handleIncreaseVolume = () => {
     const newVolume = Math.min(1, volume + 0.05);
     handleChangeVolume(newVolume);
-    setOverlayIcon(<BiSolidVolumeFull/>);
+    setOverlayIcon(<BiSolidVolumeFull />);
   };
 
   const handleDecreaseVolume = () => {
     const newVolume = Math.max(0, volume - 0.05);
     handleChangeVolume(newVolume);
     setOverlayIcon(
-      newVolume > 0 ? <BiSolidVolumeLow/> : <BiSolidVolumeMute/>
+      newVolume > 0 ? <BiSolidVolumeLow /> : <BiSolidVolumeMute />
     );
   };
 
@@ -107,7 +111,7 @@ const VideoPlayerContainer = () => {
     const newTime = clamp(time + seconds, 0, duration);
     videoRefCurrent.currentTime = newTime;
     setTime(newTime);
-    setOverlayIcon(seconds > 0 ? <RiForward5Line/> : <RiReplay5Line/>);
+    setOverlayIcon(seconds > 0 ? <RiForward5Line /> : <RiReplay5Line />);
     if (newTime < duration) setIsEnded(false);
   };
 
@@ -207,7 +211,7 @@ const VideoPlayerContainer = () => {
       onKeyDown={handleKeyDown}
       onMouseMove={() => setIsControlsVisible(true)}
     >
-      <VideoIconOverlay icon={overlayIcon}/>
+      <VideoIconOverlay icon={overlayIcon} />
       <VideoPlayer
         ref={videoRef}
         onLoadedMetadata={handlePlay}

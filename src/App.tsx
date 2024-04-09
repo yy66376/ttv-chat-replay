@@ -1,8 +1,8 @@
 import classes from "./App.module.scss";
-import Chat from "./components/chat/Chat";
 import ResizeableTwoColumnLayout from "./components/ui/layout/ResizeableTwoColumnLayout";
-import VideoSelector from "./components/VideoSelector";
+import VideoSelector from "./components/video/VideoSelector";
 import VideoPlayerContextProvider from "./store/video-player-context";
+import ChatSelector from "./components/chat/ChatSelector";
 
 function App() {
   return (
@@ -12,8 +12,8 @@ function App() {
           col1ClassName={classes["video-container"]}
           col2ClassName={classes["chat-container"]}
         >
-          <VideoSelector/>
-          <Chat/>
+          <VideoSelector />
+          <ChatSelector />
         </ResizeableTwoColumnLayout>
       </VideoPlayerContextProvider>
     </div>

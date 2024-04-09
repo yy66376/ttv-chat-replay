@@ -1,3 +1,12 @@
+import { useEffect, useRef, useState } from "react";
+import ChatMessage from "./chat-message/ChatMessage";
+import classes from "./Chat.module.scss";
+import {
+  Emote as BTTVEmote,
+  GetBTTVChannelEmotes,
+  GetBTTVGlobalEmotes,
+} from "./emote-providers/bttv/BTTVEmote";
+
 export interface ChatFile {
   FileInfo: ChatInfo;
   streamer: Streamer;
@@ -132,8 +141,49 @@ export interface EmbedCheerEmote {
   tierList: Map<number, EmbedEmoteData>;
 }
 
-const Chat = () => {
-  return <div></div>;
+interface ChatProps {
+  chatFile: ChatFile;
+}
+
+const Chat = ({ chatFile }: ChatProps) => {
+  const lastMessageRef = useRef<HTMLDivElement | null>(null);
+  const chatMessages = chatFile.comments;
+  const trimmedMessages = chatMessages.slice(100, 2000);
+  const [bttvMap, setBttvMap] = useState<Map<string, BTTVEmote> | null>(null);
+
+  useEffect(() => {
+    if (!lastMessageRef || !lastMessageRef.current) return;
+    lastMessageRef.current.scrollIntoView();
+  }, [lastMessageRef]);
+
+  useEffect(() => {
+    const fetchBttvEmotes = async () => {
+      const channelEmotes = await GetBTTVChannelEmotes(
+        chatFile.streamer.id.toString()
+      );
+      const globalEmotes = await GetBTTVGlobalEmotes();
+
+      const newBttvMap = new Map<string, BTTVEmote>();
+      channelEmotes?.forEach((e) => newBttvMap.set(e.code, e));
+      globalEmotes?.forEach((e) => newBttvMap.set(e.code, e));
+      setBttvMap(newBttvMap);
+    };
+
+    fetchBttvEmotes();
+  }, [chatFile.streamer.id]);
+
+  return (
+    <div className={classes["chat"]}>
+      {trimmedMessages.map((m, index) => (
+        <ChatMessage
+          key={m._id}
+          comment={m}
+          ref={index === trimmedMessages.length - 1 ? lastMessageRef : null}
+          bttvMap={bttvMap}
+        />
+      ))}
+    </div>
+  );
 };
 
 export default Chat;

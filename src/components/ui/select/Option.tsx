@@ -1,6 +1,6 @@
-import {useListItem} from "@floating-ui/react";
-import {useContext} from "react";
-import {SelectContext} from "../../../store/select-context";
+import { useListItem } from "@floating-ui/react";
+import { useContext } from "react";
+import { SelectContext } from "../../../store/select-context";
 import classes from "./Option.module.scss";
 
 interface OptionProps {
@@ -27,15 +27,15 @@ interface OptionProps {
 }
 
 const Option = ({
-                  label,
-                  value,
-                  className,
-                  activeClassName,
-                  selectedClassName,
-                }: OptionProps) => {
-  const {activeIndex, selectedIndex, getItemProps, handleSelect} =
+  label,
+  value,
+  className,
+  activeClassName,
+  selectedClassName,
+}: OptionProps) => {
+  const { activeIndex, selectedIndex, getItemProps, handleSelect } =
     useContext(SelectContext);
-  const {ref, index} = useListItem({label});
+  const { ref, index } = useListItem({ label });
 
   const isActive = activeIndex === index;
   const isSelected = selectedIndex === index;

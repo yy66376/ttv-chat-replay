@@ -1,4 +1,4 @@
-import {formatTimestamp} from "../../../utility/time";
+import { formatTimestamp } from "../../../utility/time";
 import classes from "./TimeDurationControl.module.scss";
 
 interface TimeDurationControlProps {
@@ -8,10 +8,10 @@ interface TimeDurationControlProps {
 }
 
 const TimeDurationControl = ({
-                               time,
-                               duration,
-                               className,
-                             }: TimeDurationControlProps) => {
+  time,
+  duration,
+  className,
+}: TimeDurationControlProps) => {
   return (
     <div className={`${className ?? ""} ${classes["time-duration-container"]}`}>
       <span className={classes["current-time"]}>{formatTimestamp(time)}</span>/

@@ -1,5 +1,5 @@
-import {useMergeRefs} from "@floating-ui/react";
-import {cloneElement, forwardRef, HTMLProps, isValidElement} from "react";
+import { useMergeRefs } from "@floating-ui/react";
+import { cloneElement, forwardRef, HTMLProps, isValidElement } from "react";
 import useTooltipContext from "../../../hooks/useTooltipContext";
 
 export type TooltipTriggerProps = {
@@ -7,10 +7,10 @@ export type TooltipTriggerProps = {
 } & HTMLProps<HTMLElement>;
 
 export const TooltipTrigger = forwardRef<HTMLDivElement, TooltipTriggerProps>(
-  function TooltipTrigger({asChild = false, children, ...props}, propRef) {
+  function TooltipTrigger({ asChild = false, children, ...props }, propRef) {
     const {
       isOpen,
-      refs: {setReference},
+      refs: { setReference },
       getReferenceProps,
     } = useTooltipContext();
 
@@ -26,7 +26,7 @@ export const TooltipTrigger = forwardRef<HTMLDivElement, TooltipTriggerProps>(
           ...props,
           ...children.props,
           "data-state": isOpen ? "open" : "closed",
-        })
+        }),
       );
     }
 
@@ -40,5 +40,5 @@ export const TooltipTrigger = forwardRef<HTMLDivElement, TooltipTriggerProps>(
         {children}
       </button>
     );
-  }
+  },
 );

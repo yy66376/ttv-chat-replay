@@ -1,12 +1,22 @@
+@use "components/breakpoints";
+
 .app {
   font-family: "Roboto", "Ubuntu", "Helvetica", sans-serif;
   height: 100%;
 }
 
 .video-container {
-  min-width: 568px;
+  max-width: 85%;
+
+  @media (orientation: landscape) {
+    min-width: 500px;
+  }
+
+  @media (max-width: breakpoints.$md) {
+    max-width: 100%;
+  }
 }
 
 .chat-container {
-  min-width: 15%;
+  width: 120px;
 }

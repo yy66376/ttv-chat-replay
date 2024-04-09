@@ -1,8 +1,8 @@
-import {useCallback, useContext, useMemo, useState} from "react";
-import {FileRejection} from "react-dropzone";
-import {RiVideoUploadLine} from "react-icons/ri";
-import {FaTwitch} from "react-icons/fa6";
-import {VideoPlayerContext} from "../../store/video-player-context";
+import { useCallback, useContext, useMemo, useState } from "react";
+import { FileRejection } from "react-dropzone";
+import { RiVideoUploadLine } from "react-icons/ri";
+import { FaTwitch } from "react-icons/fa6";
+import { VideoPlayerContext } from "../../store/video-player-context";
 import DragDrop from "../DragDrop";
 import BlockIcon from "../BlockIcon";
 import Icon from "../Icon";
@@ -11,7 +11,7 @@ import Code from "../Code";
 import classes from "./VideoDragDrop.module.scss";
 
 const VideoDragDrop = () => {
-  const {onSetSources} = useContext(VideoPlayerContext);
+  const { onSetSources } = useContext(VideoPlayerContext);
   const [rejectedFiles, setRejectedFiles] = useState<FileRejection[]>([]);
 
   const handleDrop = useCallback(
@@ -19,10 +19,10 @@ const VideoDragDrop = () => {
       setRejectedFiles(rejectedFiles);
 
       if (rejectedFiles.length === 0 && acceptedFiles.length === 1) {
-        onSetSources([{src: URL.createObjectURL(acceptedFiles[0])}]);
+        onSetSources([{ src: URL.createObjectURL(acceptedFiles[0]) }]);
       }
     },
-    [onSetSources]
+    [onSetSources],
   );
 
   const dragActiveElement = useMemo(() => {
@@ -37,7 +37,7 @@ const VideoDragDrop = () => {
         <p className={classes["drag-drop__text"]}>
           Select or drag n' drop your favorite{" "}
           <Icon verticalAlign="middle" color="#6441a5">
-            <FaTwitch/>
+            <FaTwitch />
           </Icon>{" "}
           VOD!
         </p>
@@ -67,7 +67,7 @@ const VideoDragDrop = () => {
       multiple={false}
     >
       <BlockIcon className={classes["drag-drop__upload-icon"]}>
-        <RiVideoUploadLine/>
+        <RiVideoUploadLine />
       </BlockIcon>
     </DragDrop>
   );

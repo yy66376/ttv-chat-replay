@@ -1,10 +1,20 @@
+@use "../../breakpoints";
+
 .wrapper {
   display: flex;
   height: 100%;
+
+  @media (max-width: breakpoints.$md) {
+    flex-direction: column;
+  }
 }
 
 .resizeable-col {
   flex: 1 1 auto;
+
+  @media (max-width: breakpoints.$md) {
+    width: auto !important;
+  }
 }
 
 .resize-handler-container {
@@ -23,5 +33,9 @@
 
   &:active .resize-handler {
     width: 8px;
+  }
+
+  @media (max-width: breakpoints.$md) {
+    display: none;
   }
 }

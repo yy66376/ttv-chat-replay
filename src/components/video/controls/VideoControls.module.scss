@@ -1,4 +1,9 @@
-$button-size: 2rem;
+@use "../../breakpoints";
+$button-size-xs: 0.95rem;
+$button-size-sm: 1.25rem;
+$button-size-md: 1.5rem;
+$button-size-lg: 1.65rem;
+$button-size-xl: 1.75rem;
 
 .video-controls {
   display: flex;
@@ -14,12 +19,11 @@ $button-size: 2rem;
   background: none;
   border: none;
   color: inherit;
-  height: $button-size;
-  width: $button-size;
-  font-size: 1.55rem;
+  font-size: $button-size-xs;
   cursor: pointer;
   opacity: 0.75;
-  transition: opacity 250ms ease-in-out, scale 150ms ease-in-out;
+  transition: opacity 250ms ease-in-out, scale 150ms ease-in-out,
+    font-size 150ms linear;
 
   &:hover,
   &:focus {
@@ -29,5 +33,30 @@ $button-size: 2rem;
 
   & svg {
     vertical-align: middle;
+  }
+}
+
+
+@container video-controls-container (min-width: #{breakpoints.$sm}) {
+  .video-controls__btn {
+    font-size: $button-size-sm;
+  }
+}
+
+@container video-controls-container (min-width: #{breakpoints.$md}) {
+  .video-controls__btn {
+    font-size: $button-size-md;
+  }
+}
+
+@container video-controls-container (min-width: #{breakpoints.$lg}) {
+  .video-controls__btn {
+    font-size: $button-size-lg;
+  }
+}
+
+@container video-controls-container (min-width: #{breakpoints.$xl}) {
+  .video-controls__btn {
+    font-size: $button-size-xl;
   }
 }

@@ -5,7 +5,8 @@ $timeline-br: 8px;
 $timeline-transition-time: 175ms;
 
 .video-timeline-container {
-  height: 0.8rem;
+  position: relative;
+  height: 0.85rem;
   cursor: pointer;
   display: flex;
   flex-direction: column;

@@ -23,8 +23,17 @@ import {
   useRole,
   useTypeahead,
 } from "@floating-ui/react";
-import {PropsWithChildren, useCallback, useMemo, useRef, useState,} from "react";
-import {SelectContext, SelectContextValue,} from "../../../store/select-context";
+import {
+  PropsWithChildren,
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import {
+  SelectContext,
+  SelectContextValue,
+} from "../../../store/select-context";
 import classes from "./Select.module.scss";
 
 type RequiredSelectProps = PropsWithChildren<{
@@ -67,28 +76,28 @@ interface UncontrolledSelectProps extends RequiredSelectProps {
 type SelectProps = ControlledSelectProps | UncontrolledSelectProps;
 
 const Select = ({
-                  children,
-                  activeIndex: controlledActiveIndex,
-                  selectedIndex: controlledSelectedIndex,
-                  selectedLabel: controlledSelectedLabel,
-                  initialOpen = false,
-                  initialSelected,
-                  placement = "bottom",
-                  offset: offSetOptions = 10,
-                  arrow: arrowOptions,
-                  flip: flipOptions,
-                  shift: shiftOptions,
-                  open: controlledOpen,
-                  clickProps,
-                  dismissProps,
-                  hoverProps,
-                  referenceClassName,
-                  floatingClassName,
-                  onOpenChange: setControlledOpen,
-                  onActiveIndexChange: setControlledActiveIndex,
-                  onSelectedIndexChange: setControlledSelectedIndex,
-                  onSelectedLabelChange: setControlledSelectedLabel,
-                }: SelectProps) => {
+  children,
+  activeIndex: controlledActiveIndex,
+  selectedIndex: controlledSelectedIndex,
+  selectedLabel: controlledSelectedLabel,
+  initialOpen = false,
+  initialSelected,
+  placement = "bottom",
+  offset: offSetOptions = 10,
+  arrow: arrowOptions,
+  flip: flipOptions,
+  shift: shiftOptions,
+  open: controlledOpen,
+  clickProps,
+  dismissProps,
+  hoverProps,
+  referenceClassName,
+  floatingClassName,
+  onOpenChange: setControlledOpen,
+  onActiveIndexChange: setControlledActiveIndex,
+  onSelectedIndexChange: setControlledSelectedIndex,
+  onSelectedLabelChange: setControlledSelectedLabel,
+}: SelectProps) => {
   const [uncontrolledOpen, setUncontrolledOpen] = useState(initialOpen);
   const [uncontrolledActiveIndex, setUncontrolledActiveIndex] = useState<
     number | null
@@ -112,7 +121,7 @@ const Select = ({
     setControlledSelectedLabel ?? setUncontrolledSelectedLabel;
 
   const {
-    refs: {setReference, setFloating},
+    refs: { setReference, setFloating },
     floatingStyles,
     context,
   } = useFloating({
@@ -136,7 +145,7 @@ const Select = ({
         setSelectedLabel(labelsRef.current[index]);
       }
     },
-    [setIsOpen, setSelectedIndex, setSelectedLabel]
+    [setIsOpen, setSelectedIndex, setSelectedLabel],
   );
 
   function handleTypeaheadMatch(index: number | null) {
@@ -165,12 +174,12 @@ const Select = ({
   });
 
   const click = useClick(context, clickProps);
-  const role = useRole(context, {role: "listbox"});
+  const role = useRole(context, { role: "listbox" });
   const dismiss = useDismiss(context, dismissProps);
-  const hover = useHover(context, {...hoverProps, enabled: !!hoverProps});
+  const hover = useHover(context, { ...hoverProps, enabled: !!hoverProps });
 
-  const {getReferenceProps, getFloatingProps, getItemProps} = useInteractions(
-    [listNavigation, typeAhead, click, role, dismiss, hover]
+  const { getReferenceProps, getFloatingProps, getItemProps } = useInteractions(
+    [listNavigation, typeAhead, click, role, dismiss, hover],
   );
 
   const selectContext = useMemo<SelectContextValue>(
@@ -180,7 +189,7 @@ const Select = ({
       getItemProps,
       handleSelect,
     }),
-    [activeIndex, selectedIndex, getItemProps, handleSelect]
+    [activeIndex, selectedIndex, getItemProps, handleSelect],
   );
 
   return (

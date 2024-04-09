@@ -1,5 +1,9 @@
-import {ChangeEvent} from "react";
-import {BiSolidVolumeFull, BiSolidVolumeLow, BiSolidVolumeMute,} from "react-icons/bi";
+import { ChangeEvent } from "react";
+import {
+  BiSolidVolumeFull,
+  BiSolidVolumeLow,
+  BiSolidVolumeMute,
+} from "react-icons/bi";
 import classes from "./VolumeControl.module.scss";
 
 interface VolumeControlProps {
@@ -13,24 +17,24 @@ interface VolumeControlProps {
 }
 
 const VolumeControl = ({
-                         isMuted,
-                         volume,
-                         btnClassName,
-                         containerClassName,
-                         sliderClassName,
-                         onToggleMuted,
-                         onChangeVolume,
-                       }: VolumeControlProps) => {
+  isMuted,
+  volume,
+  btnClassName,
+  containerClassName,
+  sliderClassName,
+  onToggleMuted,
+  onChangeVolume,
+}: VolumeControlProps) => {
   let volumeIcon: JSX.Element;
   switch (true) {
     case isMuted || volume === 0:
-      volumeIcon = <BiSolidVolumeMute/>;
+      volumeIcon = <BiSolidVolumeMute />;
       break;
     case volume < 0.5:
-      volumeIcon = <BiSolidVolumeLow/>;
+      volumeIcon = <BiSolidVolumeLow />;
       break;
     default:
-      volumeIcon = <BiSolidVolumeFull/>;
+      volumeIcon = <BiSolidVolumeFull />;
       break;
   }
 

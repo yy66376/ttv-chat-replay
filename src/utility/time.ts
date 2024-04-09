@@ -12,7 +12,7 @@ export const formatTimestamp = (time: number) => {
     return `${minutes}:${leadingZeroFormatter.format(seconds)}`;
   } else {
     return `${hours}:${leadingZeroFormatter.format(
-      minutes
+      minutes,
     )}:${leadingZeroFormatter.format(seconds)}`;
   }
 };

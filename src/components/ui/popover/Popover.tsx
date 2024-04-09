@@ -19,7 +19,7 @@ import {
   useInteractions,
   useRole,
 } from "@floating-ui/react";
-import {PropsWithChildren, useState} from "react";
+import { PropsWithChildren, useState } from "react";
 
 type PopoverProps = PropsWithChildren<{
   initialOpen?: boolean;
@@ -37,18 +37,18 @@ type PopoverProps = PropsWithChildren<{
 }>;
 
 const Popover = ({
-                   initialOpen = false,
-                   placement = "bottom",
-                   offset: offSetOptions = 10,
-                   arrow: arrowOptions,
-                   flip: flipOptions,
-                   shift: shiftOptions,
-                   open: controlledOpen,
-                   clickProps,
-                   dismissProps,
-                   hoverProps,
-                   onOpenChange: setControlledOpen,
-                 }: PopoverProps) => {
+  initialOpen = false,
+  placement = "bottom",
+  offset: offSetOptions = 10,
+  arrow: arrowOptions,
+  flip: flipOptions,
+  shift: shiftOptions,
+  open: controlledOpen,
+  clickProps,
+  dismissProps,
+  hoverProps,
+  onOpenChange: setControlledOpen,
+}: PopoverProps) => {
   const [uncontrolledOpen, setUncontrolledOpen] = useState(initialOpen);
   const [labelId, setLabelId] = useState<string>();
   const [descriptionId, setDescriptionId] = useState<string>();
@@ -56,7 +56,7 @@ const Popover = ({
   const open = controlledOpen ?? uncontrolledOpen;
   const setOpen = setControlledOpen ?? setUncontrolledOpen;
 
-  const {refs, floatingStyles, context} = useFloating({
+  const { refs, floatingStyles, context } = useFloating({
     placement,
     open,
     onOpenChange: setOpen,
@@ -75,9 +75,11 @@ const Popover = ({
   });
   const role = useRole(context);
   const dismiss = useDismiss(context, dismissProps);
-  const hover = useHover(context, {...hoverProps, enabled: !!hoverProps});
+  const hover = useHover(context, { ...hoverProps, enabled: !!hoverProps });
 
-  const {getReferenceProps, getFloatingProps, getItemProps} = useInteractions([click, role, dismiss, hover])
+  const { getReferenceProps, getFloatingProps, getItemProps } = useInteractions(
+    [click, role, dismiss, hover],
+  );
 };
 
 export default Popover;

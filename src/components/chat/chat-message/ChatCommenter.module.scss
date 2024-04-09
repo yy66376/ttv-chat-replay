@@ -1,0 +1,13 @@
+.chat-commenter-link {
+  font-weight: bold;
+  color: inherit;
+
+  &:visited,
+  &:link {
+    text-decoration: none;
+  }
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

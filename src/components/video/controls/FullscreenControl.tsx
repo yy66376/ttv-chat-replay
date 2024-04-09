@@ -1,4 +1,4 @@
-import {BsFullscreen, BsFullscreenExit} from "react-icons/bs";
+import { BsFullscreen, BsFullscreenExit } from "react-icons/bs";
 
 interface FullscreenControlProps {
   className?: string;
@@ -7,14 +7,14 @@ interface FullscreenControlProps {
 }
 
 const FullscreenControl = ({
-                             isFullscreen,
-                             className,
-                             onToggleFullscreen,
-                           }: FullscreenControlProps) => {
+  isFullscreen,
+  className,
+  onToggleFullscreen,
+}: FullscreenControlProps) => {
   return (
     <button className={className ?? ""} onClick={onToggleFullscreen}>
-      {!isFullscreen && <BsFullscreen/>}
-      {isFullscreen && <BsFullscreenExit/>}
+      {!isFullscreen && <BsFullscreen />}
+      {isFullscreen && <BsFullscreenExit />}
     </button>
   );
 };

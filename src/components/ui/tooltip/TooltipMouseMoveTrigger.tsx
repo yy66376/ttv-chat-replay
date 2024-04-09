@@ -1,4 +1,4 @@
-import {MutableRefObject, useEffect, useMemo} from "react";
+import { MutableRefObject, useEffect } from "react";
 import useTooltipContext from "../../../hooks/useTooltipContext";
 import clamp from "../../../utility/clamp";
 
@@ -7,22 +7,19 @@ interface TooltipMouseMoveTriggerProps {
 }
 
 const TooltipMouseMoveTrigger = ({
-                                   triggerRef,
-                                 }: TooltipMouseMoveTriggerProps) => {
+  triggerRef,
+}: TooltipMouseMoveTriggerProps) => {
   const {
     setIsOpen,
-    refs: {setPositionReference},
+    refs: { setPositionReference },
   } = useTooltipContext();
-  const triggerRefCurrent = triggerRef.current;
-
-  const triggerRect = useMemo(() => {
-    return triggerRefCurrent?.getBoundingClientRect();
-  }, [triggerRefCurrent]);
 
   useEffect(() => {
-    if (!triggerRefCurrent || !triggerRect) return;
+    if (!triggerRef?.current) return;
 
     const handleTriggerMouseMove = (e: MouseEvent) => {
+      if (!triggerRef?.current) return;
+      const triggerRect = triggerRef.current.getBoundingClientRect();
       setPositionReference({
         getBoundingClientRect() {
           return {
@@ -37,13 +34,15 @@ const TooltipMouseMoveTrigger = ({
           };
         },
       });
-
-      setIsOpen(true);
     };
 
-    const handleTriggerMouseOut = (e: MouseEvent) => setIsOpen(false);
+    const handleTriggerMouseOut = () => setIsOpen(false);
+
+    const handleTriggerMouseEnter = () => setIsOpen(true);
 
     const handleDocumentMouseMove = (e: MouseEvent) => {
+      if (!triggerRef?.current) return;
+      const triggerRect = triggerRef.current.getBoundingClientRect();
       setPositionReference({
         getBoundingClientRect() {
           const x = clamp(e.clientX, triggerRect.left, triggerRect.right);
@@ -62,18 +61,18 @@ const TooltipMouseMoveTrigger = ({
       });
     };
 
-    triggerRefCurrent.addEventListener("mousemove", handleTriggerMouseMove);
-    triggerRefCurrent.addEventListener("mouseout", handleTriggerMouseOut);
+    const triggerRefCurr = triggerRef.current;
+    triggerRefCurr.addEventListener("mousemove", handleTriggerMouseMove);
+    triggerRefCurr.addEventListener("mouseenter", handleTriggerMouseEnter);
+    triggerRefCurr.addEventListener("mouseout", handleTriggerMouseOut);
     document.addEventListener("mousemove", handleDocumentMouseMove);
     return () => {
-      triggerRefCurrent.removeEventListener(
-        "mousemove",
-        handleTriggerMouseMove
-      );
-      triggerRefCurrent.removeEventListener("mouseout", handleTriggerMouseOut);
+      triggerRefCurr.removeEventListener("mousemove", handleTriggerMouseMove);
+      triggerRefCurr.removeEventListener("mouseenter", handleTriggerMouseEnter);
+      triggerRefCurr.removeEventListener("mouseout", handleTriggerMouseOut);
       document.removeEventListener("mousemove", handleDocumentMouseMove);
     };
-  }, [triggerRefCurrent, triggerRect, setPositionReference, setIsOpen]);
+  }, [triggerRef, setPositionReference, setIsOpen]);
   return <></>;
 };
 

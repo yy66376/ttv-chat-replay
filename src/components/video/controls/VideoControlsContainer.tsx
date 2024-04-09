@@ -24,30 +24,31 @@ export type VideoControlsContainerProps = {
 };
 
 const VideoControlsContainer = ({
-                                  className,
-                                  duration,
-                                  isEnded,
-                                  isPlaying,
-                                  isFullscreen,
-                                  isMuted,
-                                  isPip,
-                                  time,
-                                  volume,
-                                  onTogglePlayPause,
-                                  onToggleFullscreen,
-                                  onToggleMuted,
-                                  onTogglePip,
-                                  onChangeVolume,
-                                  onReplay,
-                                  onSkip,
-                                  onChangeSpeed,
-                                  onSeek,
-                                }: VideoControlsContainerProps) => {
+  className,
+  duration,
+  isEnded,
+  isPlaying,
+  isFullscreen,
+  isMuted,
+  isPip,
+  time,
+  volume,
+  onTogglePlayPause,
+  onToggleFullscreen,
+  onToggleMuted,
+  onTogglePip,
+  onChangeVolume,
+  onReplay,
+  onSkip,
+  onChangeSpeed,
+  onSeek,
+}: VideoControlsContainerProps) => {
   return (
     <div className={`${className} ${classes["video-controls-container"]}`}>
       <div className={classes["video-controls-container__overlay"]}></div>
-      <VideoTimeline duration={duration} time={time} onSeek={onSeek}/>
+      <VideoTimeline duration={duration} time={time} onSeek={onSeek} />
       <VideoControls
+        className={classes["video-controls"]}
         duration={duration}
         isEnded={isEnded}
         isPlaying={isPlaying}

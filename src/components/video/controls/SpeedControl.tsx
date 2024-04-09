@@ -1,4 +1,4 @@
-import {useState} from "react";
+import { useState } from "react";
 import Option from "../../ui/select/Option";
 import Select from "../../ui/select/Select";
 import classes from "./SpeedControl.module.scss";
@@ -12,14 +12,14 @@ export interface SpeedControlProps {
 
 const initialSpeed = 1;
 
-const SpeedControl = ({className, onChangeSpeed}: SpeedControlProps) => {
+const SpeedControl = ({ className, onChangeSpeed }: SpeedControlProps) => {
   const [open, setOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(
-    playbackSpeeds.indexOf(initialSpeed)
+    playbackSpeeds.indexOf(initialSpeed),
   );
   const [selectedLabel, setSelectedLabel] = useState<string | null>(
-    `${initialSpeed.toString()}x`
+    `${initialSpeed.toString()}x`,
   );
 
   const handleSelectedIndexChange = (index: number | null) => {
