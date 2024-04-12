@@ -1,8 +1,10 @@
 .chat-message-container {
   display: flex;
+  align-items: flex-start;
   column-gap: 0.5rem;
-  padding: 0.45rem 0.8rem;
-  align-items: center;
+  padding: 0.3rem;
+  font-size: 0.92rem;
+  line-height: 1.5rem;
 }
 
 .chat-message-timestamp {
@@ -34,7 +36,6 @@
 
 .chat-message {
   color: rgba(240, 240, 240);
-  vertical-align: middle;
 }
 
 .chat-message-timestamp__arrow {

@@ -1,6 +1,11 @@
 .chat-message-body {
-  display: inline !important;
+  position: relative;
+  word-break: break-word;
   &::before {
     content: ": ";
   }
+  display: inline;
+}
+
+.chat-message-text {
 }

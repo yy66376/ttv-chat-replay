@@ -1,4 +1,9 @@
 import { useEffect, useRef, useState } from "react";
+import {
+  Badge as TTVBadge,
+  GetTwitchChannelBadges,
+  GetTwitchGlobalBadges,
+} from "./badge/TwitchBadge";
 import ChatMessage from "./chat-message/ChatMessage";
 import classes from "./Chat.module.scss";
 import {
@@ -6,6 +11,11 @@ import {
   GetBTTVChannelEmotes,
   GetBTTVGlobalEmotes,
 } from "./emote-providers/bttv/BTTVEmote";
+import {
+  Emote as STVEmote,
+  GetSTVChannelEmotes,
+  GetSTVGlobalEmotes,
+} from "./emote-providers/stv/STVEmote";
 
 export interface ChatFile {
   FileInfo: ChatInfo;
@@ -148,8 +158,17 @@ interface ChatProps {
 const Chat = ({ chatFile }: ChatProps) => {
   const lastMessageRef = useRef<HTMLDivElement | null>(null);
   const chatMessages = chatFile.comments;
-  const trimmedMessages = chatMessages.slice(100, 2000);
-  const [bttvMap, setBttvMap] = useState<Map<string, BTTVEmote> | null>(null);
+  const trimmedMessages = chatMessages.slice(1000, 2000);
+  const [ttvBadgeMap, setTtvBadgeMap] = useState<Map<string, TTVBadge> | null>(
+    null
+  );
+  const [bttvEmoteMap, setBttvEmoteMap] = useState<Map<
+    string,
+    BTTVEmote
+  > | null>(null);
+  const [stvEmoteMap, setStvEmoteMap] = useState<Map<string, STVEmote> | null>(
+    null
+  );
 
   useEffect(() => {
     if (!lastMessageRef || !lastMessageRef.current) return;
@@ -157,19 +176,44 @@ const Chat = ({ chatFile }: ChatProps) => {
   }, [lastMessageRef]);
 
   useEffect(() => {
-    const fetchBttvEmotes = async () => {
-      const channelEmotes = await GetBTTVChannelEmotes(
-        chatFile.streamer.id.toString()
-      );
-      const globalEmotes = await GetBTTVGlobalEmotes();
+    const streamerId = chatFile.streamer.id.toString();
+    const fetchTtvBadges = async () => {
+      const channelBadges = await GetTwitchChannelBadges(streamerId);
+      const globalBadges = await GetTwitchGlobalBadges();
 
-      const newBttvMap = new Map<string, BTTVEmote>();
-      channelEmotes?.forEach((e) => newBttvMap.set(e.code, e));
-      globalEmotes?.forEach((e) => newBttvMap.set(e.code, e));
-      setBttvMap(newBttvMap);
+      const newTtvBadgeMap = new Map<string, TTVBadge>();
+      channelBadges?.forEach((b) =>
+        newTtvBadgeMap.set(`${b.setId}-${b.version}`, b)
+      );
+      globalBadges?.forEach((b) =>
+        newTtvBadgeMap.set(`${b.setId}-${b.version}`, b)
+      );
+      setTtvBadgeMap(newTtvBadgeMap);
     };
 
+    const fetchBttvEmotes = async () => {
+      const channelEmotes = await GetBTTVChannelEmotes(streamerId);
+      const globalEmotes = await GetBTTVGlobalEmotes();
+
+      const newBttvEmoteMap = new Map<string, BTTVEmote>();
+      channelEmotes?.forEach((e) => newBttvEmoteMap.set(e.code, e));
+      globalEmotes?.forEach((e) => newBttvEmoteMap.set(e.code, e));
+      setBttvEmoteMap(newBttvEmoteMap);
+    };
+
+    const fetchStvEmotes = async () => {
+      const channelEmotes = await GetSTVChannelEmotes(streamerId);
+      const globalEmotes = await GetSTVGlobalEmotes();
+
+      const newStvEmoteMap = new Map<string, STVEmote>();
+      channelEmotes?.forEach((e) => newStvEmoteMap.set(e.name, e));
+      globalEmotes?.forEach((e) => newStvEmoteMap.set(e.name, e));
+      setStvEmoteMap(newStvEmoteMap);
+    };
+
+    fetchTtvBadges();
     fetchBttvEmotes();
+    fetchStvEmotes();
   }, [chatFile.streamer.id]);
 
   return (
@@ -179,7 +223,8 @@ const Chat = ({ chatFile }: ChatProps) => {
           key={m._id}
           comment={m}
           ref={index === trimmedMessages.length - 1 ? lastMessageRef : null}
-          bttvMap={bttvMap}
+          bttvEmoteMap={bttvEmoteMap}
+          stvEmoteMap={stvEmoteMap}
         />
       ))}
     </div>

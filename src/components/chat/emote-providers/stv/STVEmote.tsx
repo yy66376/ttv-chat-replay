@@ -1,4 +1,8 @@
 import axios from "axios";
+import Tooltip from "../../../ui/tooltip/Tooltip";
+import TooltipContent from "../../../ui/tooltip/TooltipContent";
+import { TooltipTrigger } from "../../../ui/tooltip/TooltipTrigger";
+import classes from "./STVEmote.module.scss";
 
 const STVAPIPrefix = "https://7tv.io/v3/";
 
@@ -13,7 +17,7 @@ const STVChannelEmotesAPI = (userId: string) =>
 /**
  * The endpoint for retrieving global STV emotes.
  */
-const STVGlobalEmotesAPI = STVAPIPrefix + "/emote-sets/global/";
+const STVGlobalEmotesAPI = STVAPIPrefix + "emote-sets/global";
 
 /**
  * Contacts the BTTV API to return an array of BTTV Emote objects belonging to the specified Twitch channel/user.
@@ -22,12 +26,15 @@ const STVGlobalEmotesAPI = STVAPIPrefix + "/emote-sets/global/";
  */
 export const GetSTVChannelEmotes = async (userId: string) => {
   try {
-    const response = await axios.get<EmoteSet>(STVChannelEmotesAPI(userId), {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    return response.data;
+    const response = await axios.get<STVChannelEmoteResponse>(
+      STVChannelEmotesAPI(userId),
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data.emote_set.emotes;
   } catch (error) {
     console.log("Failed to retrieve 7TV Channel Emotes.");
     return null;
@@ -45,7 +52,7 @@ export const GetSTVGlobalEmotes = async () => {
         "Content-Type": "application/json",
       },
     });
-    return response.data;
+    return response.data.emotes;
   } catch (error) {
     console.log("Failed to retrieve 7TV Global Emotes.");
     return null;
@@ -355,6 +362,9 @@ export interface STVChannelEmoteResponse {
    * The user's emote set.
    */
   emote_set: EmoteSet;
+  /**
+   * The user.
+   */
   user: User;
 }
 
@@ -367,7 +377,14 @@ export interface User extends Owner {
    * The user's biography.
    */
   biography: string;
-  editors: Editor;
+  /**
+   * A list of the user's editors.
+   */
+  editors: Editor[];
+  /**
+   * A list of the user's connections.
+   */
+  connections: Connection[];
 }
 
 export interface Editor {
@@ -424,12 +441,96 @@ export enum EditorPermissions {
   ViewMessages = 1 << 7,
 }
 
-export interface Connection {}
+export interface Connection {
+  /**
+   * The ID of this connection.
+   */
+  id: string;
+  /**
+   * The platform this connection belongs to.
+   */
+  platform: "TWITCH" | "YOUTUBE" | "DISCORD" | "KICK";
+  /**
+   * The username of the user in this connection.
+   */
+  username: string;
+  /**
+   * The display name of the user in this connection.
+   */
+  display_name: string;
+  /**
+   * When the user in this connection first joined 7TV.
+   */
+  linked_at: number;
+  /**
+   * The maximum number of emotes the user in this connection can have.
+   */
+  emote_capacity: number;
+  /**
+   * The ID of the user in this connection's emote set.
+   */
+  emote_set_id: string | null | undefined;
+  /**
+   * The emote set of the user in this connection.
+   */
+  emote_set: EmoteSet;
+}
 
-interface STVEmoteProps {}
+interface STVEmoteProps {
+  emote: Emote;
+}
 
-const STVEmote = ({}: STVEmoteProps) => {
-  return <div></div>;
+const STVEmote = ({ emote }: STVEmoteProps) => {
+  const emoteAuthor = emote.data.owner.display_name;
+  const emoteName = emote.name;
+
+  const emoteURL = "https:" + emote.data.host.url;
+  const emoteSources = emote.data.host.files.map((f) => ({
+    url: emoteURL + "/" + f.name,
+    pixelDensity: f.name.match(/(\d{1})x/)![1],
+  }));
+
+  const pixelDensities = emote.data.host.files
+    .map((f) => f.name.match(/(\d{1})x/)![1])
+    .sort();
+  const pixelDensityRegex = new RegExp(
+    `${pixelDensities[pixelDensities.length - 1]}x`
+  );
+  const enlargedEmoteSource =
+    emoteURL +
+    "/" +
+    emote.data.host.files.filter(
+      (f) => f.format === "AVIF" && pixelDensityRegex.test(f.name)
+    )[0].name;
+
+  const isZeroWidth =
+    (emote.data.flags & EmoteDataFlags.ZeroWidth) === EmoteDataFlags.ZeroWidth;
+
+  return (
+    <Tooltip
+      offset={15}
+      arrow
+      arrowOptions={{ fill: "white", width: 12, height: 8 }}
+    >
+      <TooltipTrigger asChild>
+        <img
+          className={`${classes["stv-emote"]} ${
+            isZeroWidth ? classes["zero-width"] : ""
+          }`}
+          src={emoteSources[0].url}
+          alt={emoteName}
+          srcSet={emoteSources
+            .map((e) => `${e.url} ${e.pixelDensity}x`)
+            .join(", ")}
+        />
+      </TooltipTrigger>
+      <TooltipContent className={classes["stv-emote-tooltip"]}>
+        <img src={enlargedEmoteSource} alt={emoteName} />
+        <div>Emote: {emoteName}</div>
+        <div>By: {emoteAuthor}</div>
+      </TooltipContent>
+    </Tooltip>
+  );
 };
 
 export default STVEmote;

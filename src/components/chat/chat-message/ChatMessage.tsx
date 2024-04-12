@@ -8,14 +8,16 @@ import TooltipContent from "../../ui/tooltip/TooltipContent";
 import { TooltipTrigger } from "../../ui/tooltip/TooltipTrigger";
 import { forwardRef } from "react";
 import { Emote as BTTVEmote } from "../emote-providers/bttv/BTTVEmote";
+import { Emote as STVEmote } from "../emote-providers/stv/STVEmote";
 
 interface ChatMessageProps {
   comment: Comment;
-  bttvMap: Map<string, BTTVEmote> | null;
+  bttvEmoteMap: Map<string, BTTVEmote> | null;
+  stvEmoteMap: Map<string, STVEmote> | null;
 }
 
 const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
-  ({ bttvMap, comment }, ref) => {
+  ({ bttvEmoteMap, stvEmoteMap, comment }, ref) => {
     const formattedTimestamp = formatTimestamp(comment.content_offset_seconds);
     return (
       <div className={classes["chat-message-container"]} ref={ref}>
@@ -25,9 +27,11 @@ const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
           arrowOptions={{ fill: "white", width: 12, height: 8 }}
         >
           <TooltipTrigger asChild>
-            <button className={classes["chat-message-timestamp"]}>
-              {formattedTimestamp}
-            </button>
+            <div style={{ display: "inline-flex" }}>
+              <button className={classes["chat-message-timestamp"]}>
+                {formattedTimestamp}
+              </button>
+            </div>
           </TooltipTrigger>
           <TooltipContent
             className={classes["chat-message-timestamp__tooltip"]}
@@ -40,7 +44,11 @@ const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
         </Tooltip>
         <div className={classes["chat-message"]}>
           <ChatCommenter comment={comment} />
-          <ChatMessageBody comment={comment} bttvMap={bttvMap} />
+          <ChatMessageBody
+            comment={comment}
+            bttvEmoteMap={bttvEmoteMap}
+            stvEmoteMap={stvEmoteMap}
+          />
         </div>
       </div>
     );
