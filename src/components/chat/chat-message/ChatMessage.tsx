@@ -9,6 +9,8 @@ import { TooltipTrigger } from "../../ui/tooltip/TooltipTrigger";
 import { forwardRef } from "react";
 import { Emote as BTTVEmote } from "../emote-providers/bttv/BTTVEmote";
 import { Emote as STVEmote } from "../emote-providers/stv/STVEmote";
+import { useRootDispatch } from "../../../hooks/useRootDispatch";
+import { seek } from "../../../store/redux/features/video/videoSlice";
 
 interface ChatMessageProps {
   comment: Comment;
@@ -18,7 +20,13 @@ interface ChatMessageProps {
 
 const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
   ({ bttvEmoteMap, stvEmoteMap, comment }, ref) => {
-    const formattedTimestamp = formatTimestamp(comment.content_offset_seconds);
+    const dispatch = useRootDispatch();
+
+    const timestamp = comment.content_offset_seconds;
+    const formattedTimestamp = formatTimestamp(timestamp);
+
+    const handleTimestampClick = () => dispatch(seek(timestamp));
+
     return (
       <div className={classes["chat-message-container"]} ref={ref}>
         <Tooltip
@@ -27,11 +35,12 @@ const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
           arrowOptions={{ fill: "white", width: 12, height: 8 }}
         >
           <TooltipTrigger asChild>
-            <div style={{ display: "inline-flex" }}>
-              <button className={classes["chat-message-timestamp"]}>
-                {formattedTimestamp}
-              </button>
-            </div>
+            <button
+              className={classes["chat-message-timestamp"]}
+              onClick={handleTimestampClick}
+            >
+              {formattedTimestamp}
+            </button>
           </TooltipTrigger>
           <TooltipContent
             className={classes["chat-message-timestamp__tooltip"]}

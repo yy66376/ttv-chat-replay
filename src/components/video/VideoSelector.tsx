@@ -1,10 +1,10 @@
-import { useContext } from "react";
-import { VideoPlayerContext } from "../../store/video-player-context";
+import { useRootSelector } from "../../hooks/useRootSelector";
+import { selectSources } from "../../store/redux/features/video/videoSlice";
 import VideoPlayerContainer from "./player/VideoPlayerContainer";
 import VideoDragDrop from "./VideoDragDrop";
 
 const VideoSelector = () => {
-  const { sources } = useContext(VideoPlayerContext);
+  const sources = useRootSelector(selectSources);
   return sources.length ? <VideoPlayerContainer /> : <VideoDragDrop />;
 };
 

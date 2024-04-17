@@ -1,4 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useRootSelector } from "../../hooks/useRootSelector";
+import {
+  selectDisplayTime,
+  selectRealTime,
+} from "../../store/redux/features/video/videoSlice";
 import {
   Badge as TTVBadge,
   GetTwitchChannelBadges,
@@ -151,14 +156,35 @@ export interface EmbedCheerEmote {
   tierList: Map<number, EmbedEmoteData>;
 }
 
+/** The number of visible messages in the chat component when syncing with displayTime. */
+const DISPLAY_TIME_MESSAGE_LIMIT = 150;
+
+/** The number of visible messages in the chat component when syncing with realTime. */
+const REAL_TIME_MESSAGE_LIMIT = 20;
+
 interface ChatProps {
   chatFile: ChatFile;
 }
 
 const Chat = ({ chatFile }: ChatProps) => {
-  const lastMessageRef = useRef<HTMLDivElement | null>(null);
-  const chatMessages = chatFile.comments;
-  const trimmedMessages = chatMessages.slice(1000, 2000);
+  const realTime = useRootSelector(selectRealTime);
+  const displayTime = useRootSelector(selectDisplayTime);
+  const messages = chatFile.comments;
+  const [messageState, setMessageState] = useState<{
+    /** The start index (inclusive). */
+    startIndex: number;
+    /** The end index (inclusive). */
+    endIndex: number;
+    /** The ID of the last message in the visibleMessages array. */
+    lastMessageId: string | null;
+    /** A list of visible messages, a subarray of messages (i.e. messages.slice(startIndex, endIndex + 1)) */
+    visibleMessages: Comment[];
+  }>({
+    startIndex: -1,
+    endIndex: -1,
+    lastMessageId: null,
+    visibleMessages: [],
+  });
   const [ttvBadgeMap, setTtvBadgeMap] = useState<Map<string, TTVBadge> | null>(
     null
   );
@@ -170,11 +196,89 @@ const Chat = ({ chatFile }: ChatProps) => {
     null
   );
 
+  // ensures that messages are synced with the display time in the video
   useEffect(() => {
-    if (!lastMessageRef || !lastMessageRef.current) return;
-    lastMessageRef.current.scrollIntoView();
-  }, [lastMessageRef]);
+    const updateMessages = () => {
+      setMessageState((prevMessageState) => {
+        // search to the right for the latest message with a time less than the display time
+        let targetIndex =
+          prevMessageState.endIndex < 0 ? 0 : prevMessageState.endIndex;
+        while (
+          targetIndex < messages.length &&
+          messages[targetIndex].content_offset_seconds <= displayTime
+        ) {
+          targetIndex++;
+        }
 
+        // limit the visible messages to the last DISPLAY_TIME_MESSAGE_LIMIT messages
+        const endIndex = targetIndex - 1;
+        const startIndex = Math.max(
+          0,
+          prevMessageState.startIndex,
+          endIndex - DISPLAY_TIME_MESSAGE_LIMIT + 1
+        );
+        return {
+          startIndex,
+          endIndex,
+          lastMessageId: endIndex < 0 ? null : messages[endIndex]._id,
+          visibleMessages:
+            endIndex < 0 ? [] : messages.slice(startIndex, endIndex + 1),
+        };
+      });
+    };
+
+    const timeoutId = setTimeout(() => {
+      updateMessages();
+    }, 250);
+
+    return () => clearTimeout(timeoutId);
+  }, [displayTime, messages]);
+
+  // ensures that messages are synced with real time in the video (during seeks)
+  useEffect(() => {
+    const updateMessages = () => {
+      // binary search for the entry point in visibleMessages
+      let low = 0;
+      let high = messages.length - 1;
+      let targetIndex = -1;
+
+      while (low <= high) {
+        const mid = Math.floor((high - low) / 2) + low;
+        const targetMessage = messages[mid];
+        if (targetMessage.content_offset_seconds > realTime) {
+          high = mid - 1;
+        } else {
+          targetIndex = mid;
+          low = mid + 1;
+        }
+      }
+
+      // visible messages should be the previous REAL_TIME_MESSAGE_LIMIT messages ending at targetIdx
+      const startIndex = Math.max(0, targetIndex - REAL_TIME_MESSAGE_LIMIT + 1);
+      const endIndex = targetIndex;
+      setMessageState({
+        startIndex,
+        endIndex,
+        lastMessageId: endIndex < 0 ? null : messages[endIndex]._id,
+        visibleMessages:
+          endIndex < 0 ? [] : messages.slice(startIndex, endIndex + 1),
+      });
+    };
+
+    const timeoutId = setTimeout(() => {
+      updateMessages();
+    }, 250);
+
+    return () => clearTimeout(timeoutId);
+  }, [messages, realTime]);
+
+  // ensures that the last message is scrolled
+  const lastMessageRef = useCallback((node: HTMLDivElement | null) => {
+    if (node === null) return;
+    node.scrollIntoView();
+  }, []);
+
+  // retreive TTV, BTTV, and STV emotes/badges
   useEffect(() => {
     const streamerId = chatFile.streamer.id.toString();
     const fetchTtvBadges = async () => {
@@ -218,11 +322,11 @@ const Chat = ({ chatFile }: ChatProps) => {
 
   return (
     <div className={classes["chat"]}>
-      {trimmedMessages.map((m, index) => (
+      {messageState.visibleMessages.map((m, index) => (
         <ChatMessage
           key={m._id}
           comment={m}
-          ref={index === trimmedMessages.length - 1 ? lastMessageRef : null}
+          ref={m._id === messageState.lastMessageId ? lastMessageRef : null}
           bttvEmoteMap={bttvEmoteMap}
           stvEmoteMap={stvEmoteMap}
         />

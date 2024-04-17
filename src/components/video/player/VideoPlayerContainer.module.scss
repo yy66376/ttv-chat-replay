@@ -12,7 +12,7 @@
 
   & .video-controls-container {
     opacity: 100;
-    z-index: 99;
+    z-index: 2;
     transition: opacity 200ms ease-in-out;
 
     &.hidden {

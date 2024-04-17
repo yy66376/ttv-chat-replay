@@ -7,99 +7,44 @@ import PipControl from "./PipControl";
 import VolumeControl from "./VolumeControl";
 import ReplayControl from "./ReplayControl";
 import PlayControl from "./PlayControl";
+import { useRootDispatch } from "../../../hooks/useRootDispatch";
+import {
+  selectIsEnded,
+  skip,
+} from "../../../store/redux/features/video/videoSlice";
+import { useRootSelector } from "../../../hooks/useRootSelector";
 
 interface VideoControlsProps {
   className?: string;
-  duration: number;
-  isEnded: boolean;
-  isPlaying: boolean;
-  isFullscreen: boolean;
-  isMuted: boolean;
-  isPip: boolean;
-  time: number;
-  volume: number;
-  onTogglePlayPause: () => void;
-  onToggleFullscreen: () => void;
-  onToggleMuted: () => void;
-  onTogglePip: () => void;
-  onChangeVolume: (volume: number) => void;
-  onReplay: () => void;
-  onSkip: (seconds: number) => void;
-  onChangeSpeed: (speed: number) => void;
 }
 
-const VideoControls = ({
-  className,
-  duration,
-  isEnded,
-  isPlaying,
-  isFullscreen,
-  isMuted,
-  isPip,
-  time,
-  volume,
-  onTogglePlayPause,
-  onToggleFullscreen,
-  onToggleMuted,
-  onTogglePip,
-  onChangeVolume,
-  onReplay,
-  onSkip,
-  onChangeSpeed,
-}: VideoControlsProps) => {
+const VideoControls = ({ className }: VideoControlsProps) => {
+  const dispatch = useRootDispatch();
+  const isEnded = useRootSelector(selectIsEnded);
+
+  const handleSkip = (seconds: number) => dispatch(skip(seconds));
+
   return (
     <div className={`${className ?? ""} ${classes["video-controls"]}`}>
-      {isEnded && (
-        <ReplayControl
-          className={classes["video-controls__btn"]}
-          onReplay={onReplay}
-        />
-      )}
-      {!isEnded && (
-        <PlayControl
-          className={classes["video-controls__btn"]}
-          isPlaying={isPlaying}
-          onTogglePlayPause={onTogglePlayPause}
-        />
-      )}
+      {isEnded && <ReplayControl className={classes["video-controls__btn"]} />}
+      {!isEnded && <PlayControl className={classes["video-controls__btn"]} />}
       <button
         className={classes["video-controls__btn"]}
-        onClick={() => onSkip(-5)}
+        onClick={() => handleSkip(-5)}
       >
         <RiReplay5Line />
       </button>
       <button
         className={classes["video-controls__btn"]}
-        onClick={() => onSkip(5)}
+        onClick={() => handleSkip(5)}
       >
         <RiForward5Line />
       </button>
-      <VolumeControl
-        isMuted={isMuted}
-        volume={volume}
-        btnClassName={classes["video-controls__btn"]}
-        onChangeVolume={onChangeVolume}
-        onToggleMuted={onToggleMuted}
-      />
-      <TimeDurationControl
-        className={classes["video-controls__btn"]}
-        time={time}
-        duration={duration}
-      />
-      <SpeedControl
-        className={classes["video-controls__btn"]}
-        onChangeSpeed={onChangeSpeed}
-      />
-      <PipControl
-        isPip={isPip}
-        className={classes["video-controls__btn"]}
-        onTogglePip={onTogglePip}
-      />
-      <FullscreenControl
-        isFullscreen={isFullscreen}
-        className={classes["video-controls__btn"]}
-        onToggleFullscreen={onToggleFullscreen}
-      />
+      <VolumeControl btnClassName={classes["video-controls__btn"]} />
+      <TimeDurationControl className={classes["video-controls__btn"]} />
+      <SpeedControl className={classes["video-controls__btn"]} />
+      <PipControl className={classes["video-controls__btn"]} />
+      <FullscreenControl className={classes["video-controls__btn"]} />
     </div>
   );
 };

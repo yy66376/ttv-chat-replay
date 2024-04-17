@@ -1,18 +1,23 @@
 import { BsFullscreen, BsFullscreenExit } from "react-icons/bs";
+import { useRootDispatch } from "../../../hooks/useRootDispatch";
+import { useRootSelector } from "../../../hooks/useRootSelector";
+import {
+  selectIsFullscreen,
+  toggleFullscreen,
+} from "../../../store/redux/features/video/videoSlice";
 
 interface FullscreenControlProps {
   className?: string;
-  isFullscreen: boolean;
-  onToggleFullscreen: () => void;
 }
 
-const FullscreenControl = ({
-  isFullscreen,
-  className,
-  onToggleFullscreen,
-}: FullscreenControlProps) => {
+const FullscreenControl = ({ className }: FullscreenControlProps) => {
+  const dispatch = useRootDispatch();
+  const isFullscreen = useRootSelector(selectIsFullscreen);
+
+  const handleToggle = () => dispatch(toggleFullscreen());
+
   return (
-    <button className={className ?? ""} onClick={onToggleFullscreen}>
+    <button className={className ?? ""} onClick={handleToggle}>
       {!isFullscreen && <BsFullscreen />}
       {isFullscreen && <BsFullscreenExit />}
     </button>

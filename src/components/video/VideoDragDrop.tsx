@@ -1,17 +1,18 @@
-import { useCallback, useContext, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { FileRejection } from "react-dropzone";
 import { RiVideoUploadLine } from "react-icons/ri";
 import { FaTwitch } from "react-icons/fa6";
-import { VideoPlayerContext } from "../../store/video-player-context";
 import DragDrop from "../DragDrop";
 import BlockIcon from "../BlockIcon";
 import Icon from "../Icon";
 import DragDropErrorText from "../DragDropErrorText";
 import Code from "../Code";
 import classes from "./VideoDragDrop.module.scss";
+import { useRootDispatch } from "../../hooks/useRootDispatch";
+import { setSources } from "../../store/redux/features/video/videoSlice";
 
 const VideoDragDrop = () => {
-  const { onSetSources } = useContext(VideoPlayerContext);
+  const dispatch = useRootDispatch();
   const [rejectedFiles, setRejectedFiles] = useState<FileRejection[]>([]);
 
   const handleDrop = useCallback(
@@ -19,10 +20,10 @@ const VideoDragDrop = () => {
       setRejectedFiles(rejectedFiles);
 
       if (rejectedFiles.length === 0 && acceptedFiles.length === 1) {
-        onSetSources([{ src: URL.createObjectURL(acceptedFiles[0]) }]);
+        dispatch(setSources([URL.createObjectURL(acceptedFiles[0])]));
       }
     },
-    [onSetSources],
+    [dispatch]
   );
 
   const dragActiveElement = useMemo(() => {

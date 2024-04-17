@@ -6,6 +6,13 @@ import {
   useRef,
   useState,
 } from "react";
+import { useRootDispatch } from "../../../hooks/useRootDispatch";
+import { useRootSelector } from "../../../hooks/useRootSelector";
+import {
+  seek,
+  selectDisplayTime,
+  selectDuration,
+} from "../../../store/redux/features/video/videoSlice";
 import clamp from "../../../utility/clamp";
 import { formatTimestamp } from "../../../utility/time";
 import Tooltip from "../../ui/tooltip/Tooltip";
@@ -15,13 +22,13 @@ import classes from "./VideoTimeline.module.scss";
 
 let isScrubbing = false;
 
-interface VideoTimelineProps {
-  duration: number;
-  time: number;
-  onSeek: (seconds: number) => void;
-}
+interface VideoTimelineProps {}
 
-const VideoTimeline = ({ duration, time, onSeek }: VideoTimelineProps) => {
+const VideoTimeline = (props: VideoTimelineProps) => {
+  const time = useRootSelector(selectDisplayTime);
+  const duration = useRootSelector(selectDuration);
+  const dispatch = useRootDispatch();
+
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const [seekTime, setSeekTime] = useState<number | null>(null);
   const timelineContainerRef = useRef<HTMLDivElement | null>(null);
@@ -56,7 +63,7 @@ const VideoTimeline = ({ duration, time, onSeek }: VideoTimelineProps) => {
       if (!isScrubbing || seekTime === null) return;
       isScrubbing = false;
       setIsTooltipOpen(false);
-      onSeek(seekTime);
+      dispatch(seek(seekTime));
     };
 
     const handleMouseMove = (e: globalThis.MouseEvent) => {
@@ -72,7 +79,7 @@ const VideoTimeline = ({ duration, time, onSeek }: VideoTimelineProps) => {
       document.removeEventListener("mouseup", handleMouseUp);
       document.removeEventListener("mousemove", handleMouseMove);
     };
-  }, [seekTime, onSeek, calculateTime]);
+  }, [seekTime, calculateTime, dispatch]);
 
   return (
     <>

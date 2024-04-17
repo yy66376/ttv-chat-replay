@@ -1,53 +1,52 @@
-import { ChangeEvent } from "react";
+import { ChangeEvent, useMemo } from "react";
 import {
   BiSolidVolumeFull,
   BiSolidVolumeLow,
   BiSolidVolumeMute,
 } from "react-icons/bi";
+import { useRootDispatch } from "../../../hooks/useRootDispatch";
+import { useRootSelector } from "../../../hooks/useRootSelector";
+import {
+  selectIsMuted,
+  selectVolume,
+  setVolume,
+  toggleMute,
+} from "../../../store/redux/features/video/videoSlice";
 import classes from "./VolumeControl.module.scss";
 
 interface VolumeControlProps {
-  isMuted: boolean;
-  volume: number;
   btnClassName?: string;
   containerClassName?: string;
   sliderClassName?: string;
-  onToggleMuted: () => void;
-  onChangeVolume: (volume: number) => void;
 }
 
 const VolumeControl = ({
-  isMuted,
-  volume,
   btnClassName,
   containerClassName,
   sliderClassName,
-  onToggleMuted,
-  onChangeVolume,
 }: VolumeControlProps) => {
-  let volumeIcon: JSX.Element;
-  switch (true) {
-    case isMuted || volume === 0:
-      volumeIcon = <BiSolidVolumeMute />;
-      break;
-    case volume < 0.5:
-      volumeIcon = <BiSolidVolumeLow />;
-      break;
-    default:
-      volumeIcon = <BiSolidVolumeFull />;
-      break;
-  }
+  const dispatch = useRootDispatch();
+  const volume = useRootSelector(selectVolume);
+  const isMuted = useRootSelector(selectIsMuted);
 
-  const handleChangeVolume = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleVolumeChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newVolume = e.target.valueAsNumber;
-    onChangeVolume(newVolume);
+    dispatch(setVolume(newVolume));
   };
+
+  const handleToggleMute = () => dispatch(toggleMute());
+
+  const volumeIcon = useMemo(() => {
+    if (isMuted || volume === 0) return <BiSolidVolumeMute />;
+    else if (volume < 0.5) return <BiSolidVolumeLow />;
+    else return <BiSolidVolumeFull />;
+  }, [volume, isMuted]);
 
   return (
     <div
       className={`${containerClassName ?? ""} ${classes["volume-container"]}`}
     >
-      <button className={btnClassName ?? ""} onClick={onToggleMuted}>
+      <button className={btnClassName ?? ""} onClick={handleToggleMute}>
         {volumeIcon}
       </button>
       <input
@@ -57,7 +56,7 @@ const VolumeControl = ({
         max={1}
         step="any"
         value={isMuted ? 0 : volume}
-        onChange={handleChangeVolume}
+        onChange={handleVolumeChange}
       />
     </div>
   );
