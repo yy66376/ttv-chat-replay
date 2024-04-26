@@ -1,0 +1,25 @@
+@use "../breakpoints";
+@use "../colors";
+
+.drag-drop__text {
+  font-size: 1.35em;
+  color: #514a4aab;
+  margin: 0 1.2rem;
+
+  @media (min-width: breakpoints.$lg) {
+    font-size: 1.75rem;
+  }
+}
+
+.drag-drop__upload-icon {
+  color: colors.$deep-purple;
+  font-size: 7.25rem;
+
+  @media (min-width: breakpoints.$lg) {
+    font-size: 8.75rem;
+  }
+
+  @media (min-width: breakpoints.$xxl) {
+    font-size: 10rem;
+  }
+}

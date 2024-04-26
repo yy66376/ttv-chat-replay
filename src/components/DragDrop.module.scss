@@ -1,0 +1,37 @@
+@use "colors";
+@use "breakpoints";
+@use "sass:color";
+
+$margin: 0.15rem;
+
+.drag-drop-container {
+  padding: 0.75rem;
+  height: 100%;
+}
+
+.drag-drop {
+  background-color: lighten(colors.$light-gray, 18%);
+  margin: $margin;
+  border: 2px dashed colors.$main-gray;
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  place-items: center center;
+  transition: all 125ms ease-in-out;
+  height: calc(100% - 2 * $margin);
+  text-align: center;
+  cursor: pointer;
+
+  @media (min-width: breakpoints.$lg) {
+    margin: 5 * $margin;
+    height: calc(100% - 2 * 5 * $margin);
+  }
+}
+
+.drag-drop--focused,
+.drag-drop:active {
+  border-width: 3px;
+  border-color: colors.$light-blue;
+  transform: scale(1.015);
+}

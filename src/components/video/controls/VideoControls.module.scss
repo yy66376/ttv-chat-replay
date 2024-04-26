@@ -1,0 +1,62 @@
+@use "../../breakpoints";
+$button-size-xs: 0.95rem;
+$button-size-sm: 1.25rem;
+$button-size-md: 1.5rem;
+$button-size-lg: 1.65rem;
+$button-size-xl: 1.75rem;
+
+.video-controls {
+  display: flex;
+  column-gap: 1.05rem;
+  padding: 0.75rem;
+  align-items: center;
+}
+
+.video-controls__btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: $button-size-xs;
+  cursor: pointer;
+  opacity: 0.75;
+  transition: opacity 250ms ease-in-out, scale 150ms ease-in-out,
+    font-size 150ms linear;
+
+  &:hover,
+  &:focus {
+    opacity: 1;
+    transform: scale(1.038);
+  }
+
+  & svg {
+    vertical-align: middle;
+  }
+}
+
+
+@container video-controls-container (min-width: #{breakpoints.$sm}) {
+  .video-controls__btn {
+    font-size: $button-size-sm;
+  }
+}
+
+@container video-controls-container (min-width: #{breakpoints.$md}) {
+  .video-controls__btn {
+    font-size: $button-size-md;
+  }
+}
+
+@container video-controls-container (min-width: #{breakpoints.$lg}) {
+  .video-controls__btn {
+    font-size: $button-size-lg;
+  }
+}
+
+@container video-controls-container (min-width: #{breakpoints.$xl}) {
+  .video-controls__btn {
+    font-size: $button-size-xl;
+  }
+}

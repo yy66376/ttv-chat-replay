@@ -1,0 +1,22 @@
+.video-player-container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background-color: black;
+  height: 100%;
+
+  &.hidden {
+    cursor: none;
+  }
+
+  & .video-controls-container {
+    opacity: 100;
+    z-index: 2;
+    transition: opacity 200ms ease-in-out;
+
+    &.hidden {
+      opacity: 0;
+    }
+  }
+}

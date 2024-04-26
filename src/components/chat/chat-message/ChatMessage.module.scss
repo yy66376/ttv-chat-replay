@@ -1,0 +1,43 @@
+.chat-message-container {
+  display: flex;
+  align-items: flex-start;
+  column-gap: 0.5rem;
+  padding: 0.3rem;
+  font-size: 0.92rem;
+  line-height: 1.5rem;
+}
+
+.chat-message-timestamp {
+  background-color: transparent;
+  border: none;
+  font: inherit;
+  outline: inherit;
+  cursor: pointer;
+  color: rgba(222, 222, 222);
+  padding: 0 5px;
+
+  &:hover {
+    background-color: rgb(78, 78, 78);
+    border-radius: 5px;
+  }
+
+  &--bold {
+    color: rgb(55, 55, 55);
+    font-weight: bold;
+  }
+
+  &__tooltip {
+    background-color: rgba(248, 248, 248);
+    padding: 0.2rem 0.4rem;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  }
+}
+
+.chat-message {
+  color: rgba(240, 240, 240);
+}
+
+.chat-message-timestamp__arrow {
+  width: 5px;
+}
