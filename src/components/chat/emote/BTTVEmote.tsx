@@ -1,7 +1,7 @@
 import axios from "axios";
-import Tooltip from "../../../ui/tooltip/Tooltip";
-import TooltipContent from "../../../ui/tooltip/TooltipContent";
-import { TooltipTrigger } from "../../../ui/tooltip/TooltipTrigger";
+import Tooltip from "../../ui/tooltip/Tooltip";
+import TooltipContent from "../../ui/tooltip/TooltipContent";
+import { TooltipTrigger } from "../../ui/tooltip/TooltipTrigger";
 import classes from "./BTTVEmote.module.scss";
 
 const BTTVAPIPrefix = "https://api.betterttv.net/3/";

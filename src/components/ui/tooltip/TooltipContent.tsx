@@ -7,7 +7,7 @@ import { forwardRef, HTMLProps } from "react";
 import useTooltipContext from "../../../hooks/useTooltipContext";
 import { AnimatePresence, motion } from "framer-motion";
 
-export type TooltipContentProps = {} & HTMLProps<HTMLElement>;
+export type TooltipContentProps = HTMLProps<HTMLElement>;
 
 const TooltipContent = forwardRef<HTMLDivElement, TooltipContentProps>(
   function TooltipContent({ style, children, ...props }, propRef) {

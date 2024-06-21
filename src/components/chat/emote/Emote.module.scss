@@ -1,11 +1,15 @@
 $tooltip-width: 16rem;
 
-.stv-emote {
+.emote-wrapper {
+  position: relative;
+}
+
+.emote {
   margin: -0.29rem 0;
   vertical-align: middle;
 }
 
-.stv-emote-tooltip {
+.emote-tooltip {
   padding: 0.6rem 0.5rem;
   background-color: white;
   color: black;
@@ -20,6 +24,8 @@ $tooltip-width: 16rem;
   }
 
   & &__text {
+    font-family: "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
+      "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
     max-width: $tooltip-width - 2.5rem;
     text-align: center;
     margin: 0;

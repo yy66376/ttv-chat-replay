@@ -6,7 +6,7 @@ import DragDrop from "../DragDrop";
 import BlockIcon from "../BlockIcon";
 import Icon from "../Icon";
 import DragDropErrorText from "../DragDropErrorText";
-import Code from "../Code";
+import Code from "../ui/text/Code";
 import classes from "./VideoDragDrop.module.scss";
 import { useRootDispatch } from "../../hooks/useRootDispatch";
 import { setSources } from "../../store/redux/features/video/videoSlice";

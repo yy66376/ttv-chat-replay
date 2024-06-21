@@ -26,19 +26,19 @@ export const TooltipTrigger = forwardRef<HTMLDivElement, TooltipTriggerProps>(
           ...props,
           ...children.props,
           "data-state": isOpen ? "open" : "closed",
-        }),
+        })
       );
     }
 
     return (
-      <button
+      <div
         ref={ref}
         // The user can style the trigger based on the state
         data-state={isOpen ? "open" : "closed"}
         {...getReferenceProps(props)}
       >
         {children}
-      </button>
+      </div>
     );
-  },
+  }
 );

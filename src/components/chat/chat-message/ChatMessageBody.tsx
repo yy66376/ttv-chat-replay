@@ -1,9 +1,8 @@
 import { Comment } from "../Chat";
 import classes from "./ChatMessageBody.module.scss";
-import BTTVEmote, {
-  Emote as BttvEmote,
-} from "../emote-providers/bttv/BTTVEmote";
-import STVEmote, { Emote as StvEmote } from "../emote-providers/stv/STVEmote";
+import BTTVEmote, { Emote as BttvEmote } from "../emote/BTTVEmote";
+import STVEmote from "../emote/STVEmote.component";
+import { Emote as StvEmote } from "../emote/STVEmote.types";
 
 interface ChatMessageBodyProps {
   comment: Comment;

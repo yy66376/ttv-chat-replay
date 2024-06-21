@@ -8,7 +8,7 @@ import classes from "./ChatDragDrop.module.scss";
 import Icon from "../Icon";
 import { FaTwitch } from "react-icons/fa6";
 import DragDropErrorText from "../DragDropErrorText";
-import Code from "../Code";
+import Code from "../ui/text/Code";
 
 enum Error {
   TooManyFiles,

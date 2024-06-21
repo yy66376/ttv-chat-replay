@@ -15,12 +15,12 @@ import {
   Emote as BTTVEmote,
   GetBTTVChannelEmotes,
   GetBTTVGlobalEmotes,
-} from "./emote-providers/bttv/BTTVEmote";
+} from "./emote/BTTVEmote";
+import { Emote as StvEmote } from "./emote/STVEmote.types";
 import {
-  Emote as STVEmote,
   GetSTVChannelEmotes,
   GetSTVGlobalEmotes,
-} from "./emote-providers/stv/STVEmote";
+} from "./emote/STVEmote.requests";
 import { FaArrowDown } from "react-icons/fa";
 import { AnimatePresence, motion } from "framer-motion";
 import { getTtvBadgeKey } from "./chat-message/ChatBadge";
@@ -195,7 +195,7 @@ const Chat = ({ chatFile }: ChatProps) => {
     string,
     BTTVEmote
   > | null>(null);
-  const [stvEmoteMap, setStvEmoteMap] = useState<Map<string, STVEmote> | null>(
+  const [stvEmoteMap, setStvEmoteMap] = useState<Map<string, StvEmote> | null>(
     null
   );
   const chatWrapperRef = useRef<HTMLDivElement | null>(null);
@@ -304,7 +304,7 @@ const Chat = ({ chatFile }: ChatProps) => {
       const channelEmotes = await GetSTVChannelEmotes(streamerId);
       const globalEmotes = await GetSTVGlobalEmotes();
 
-      const newStvEmoteMap = new Map<string, STVEmote>();
+      const newStvEmoteMap = new Map<string, StvEmote>();
       channelEmotes?.forEach((e) => newStvEmoteMap.set(e.name, e));
       globalEmotes?.forEach((e) => newStvEmoteMap.set(e.name, e));
       setStvEmoteMap(newStvEmoteMap);
